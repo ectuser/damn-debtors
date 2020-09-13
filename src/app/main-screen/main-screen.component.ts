@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PeriodicElement } from '../models/person';
+import { Debtor } from '../models/debtor';
 
 
 @Component({
@@ -11,19 +11,13 @@ export class MainScreenComponent implements OnInit {
 
   constructor() { }
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
+  displayedColumns: string[] = ['name', 'debt', 'loanDate', 'paymentDate'];
 
-  dataSource: PeriodicElement[] = [
-    {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-    {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-    {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-    {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-    {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-    {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-    {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-    {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-    {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-    {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
+  dataSource: Debtor[] = [
+    {name: "Alex", debt: 1000, loanDate: new Date("11.05.2020"), paymentDate: new Date("11.11.2020")},
+    {name: "Ivan", debt: 1500, loanDate: new Date("11.05.2020"), paymentDate: new Date("11.11.2020")},
+    {name: "John", debt: 2000, loanDate: new Date("11.05.2020"), paymentDate: new Date("11.11.2020")},
+    {name: "Alfred", debt: 30000, loanDate: new Date("11.05.2020"), paymentDate: new Date("11.11.2020")}
   ];
 
   ngOnInit(): void {
