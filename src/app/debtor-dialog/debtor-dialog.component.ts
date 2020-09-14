@@ -23,9 +23,14 @@ export class DebtorDialogComponent {
       })
     }
 
-  onSubmit(formValues): void {
+  onSubmit(formValues: Debtor): void {
     console.log(formValues);
-    let newDebtorObject: Debtor = {...formValues};
+    let newDebtorObject: Debtor = {id: this.data.id ,...formValues};
+    // console.log(newDebtorObject);
+    // this.data.name = formValues.name;
+    // this.data.debt = formValues.debt;
+    // this.data.loanDate = formValues.loanDate;
+    // this.data.paymentDate = formValues.paymentDate;
     this.debtorService.updateDebtor(newDebtorObject).subscribe(() => {
       
     });

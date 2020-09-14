@@ -22,7 +22,7 @@ export class MainScreenComponent implements OnInit {
 
   openDialog(debtor: Debtor){
     const dialogRef = this.dialog.open(DebtorDialogComponent, {
-      width: '250px',
+      width: '300px',
       data: {...debtor}
     });
 

@@ -29,12 +29,13 @@ export class DebtorService {
 
   updateDebtor(debtor: Debtor): Observable<any>{
     let databaseDebtor = this.transformDebtorToDatabaseDebtor(debtor);
+    console.log(databaseDebtor);
     return this.http.put(this.debtorsUrl, databaseDebtor, this.httpOptions);
   }
 
 
   public transformDebtorToDatabaseDebtor(debtor: Debtor): DatabaseDebtor{
-    let databaseDebtor : DatabaseDebtor = {id: Date.now(), name: debtor.name, debt: debtor.debt};
+    let databaseDebtor : DatabaseDebtor = {id: debtor.id, name: debtor.name, debt: debtor.debt};
     databaseDebtor.paymentDate = debtor.paymentDate ? debtor.paymentDate.toDateString() : null;
     databaseDebtor.loanDate = debtor.loanDate ? debtor.loanDate.toDateString() : null;
     return databaseDebtor;
