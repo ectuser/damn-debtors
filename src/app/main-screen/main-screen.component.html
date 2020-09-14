@@ -1,31 +1,26 @@
 <div>
-    <table class="debtors-list" mat-table [dataSource]="dataSource">
-        <!-- Position Column -->
+  <table class="debtors-list" mat-table [dataSource]="dataSource">
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row class="debtor-row" *matRowDef="let row; columns: displayedColumns;" (click)="openDialog(row)"></mat-row>
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{element.name}} <span style="display: none;">{{element.id}}</span> </mat-cell>
     </ng-container>
   
-    <!-- Name Column -->
     <ng-container matColumnDef="debt">
-      <th mat-header-cell *matHeaderCellDef> Debt </th>
-      <td mat-cell *matCellDef="let element"> {{element.debt}} </td>
+      <mat-header-cell  *matHeaderCellDef> Debt </mat-header-cell>
+      <mat-cell  *matCellDef="let element"> {{element.debt}} </mat-cell>
     </ng-container>
   
-    <!-- Weight Column -->
     <ng-container matColumnDef="loanDate">
-      <th mat-header-cell *matHeaderCellDef> Loan Date </th>
-      <td mat-cell *matCellDef="let element"> {{element.loanDate?.toDateString()}} </td>
+      <mat-header-cell  *matHeaderCellDef> Loan Date </mat-header-cell>
+      <mat-cell  *matCellDef="let element"> {{element.loanDate?.toDateString()}} </mat-cell>
     </ng-container>
   
-    <!-- Symbol Column -->
     <ng-container matColumnDef="paymentDate">
-      <th mat-header-cell *matHeaderCellDef> Payment Date </th>
-      <td mat-cell *matCellDef="let element"> {{element.paymentDate?.toDateString()}} </td>
+      <mat-header-cell  *matHeaderCellDef> Payment Date </mat-header-cell>
+      <mat-cell  *matCellDef="let element"> {{element.paymentDate?.toDateString()}} </mat-cell>
     </ng-container>
-  
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 </div>
 

@@ -6,3 +6,12 @@
     right: 30px;
     bottom: 30px;
 }
+.debtor-row{
+    cursor: pointer;
+}
+.debtor-row:hover{
+    background-color: #ff408050;
+}
+.debtor-row:active{
+    background-color: #ff40809d;
+}

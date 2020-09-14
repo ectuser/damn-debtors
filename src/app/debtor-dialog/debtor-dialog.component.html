@@ -1,0 +1,33 @@
+<form [formGroup]="addDebtorForm" (ngSubmit)="onSubmit(addDebtorForm.value)">
+    <div>
+      <mat-form-field class="add-debtor-field">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name">
+      </mat-form-field>
+    </div>
+    
+    <div>
+      <mat-form-field class="add-debtor-field">
+        <mat-label>Debt</mat-label>
+        <input matInput formControlName="debt" type="number">
+      </mat-form-field>
+    </div>
+
+    <div>
+      <mat-form-field appearance="fill" class="add-debtor-field">
+        <mat-label>Loan date</mat-label>
+        <input matInput [matDatepicker]="loanDatePicker" formControlName="loanDate">
+        <mat-datepicker-toggle matSuffix [for]="loanDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #loanDatePicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field appearance="fill" class="add-debtor-field">
+        <mat-label>Payment date</mat-label>
+        <input matInput [matDatepicker]="paymentDatePicker" formControlName="paymentDate">
+        <mat-datepicker-toggle matSuffix [for]="paymentDatePicker"></mat-datepicker-toggle>
+        <mat-datepicker #paymentDatePicker></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <button mat-raised-button color="primary" type="submit">Save</button>
+</form>

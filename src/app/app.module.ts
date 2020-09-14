@@ -19,13 +19,17 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService } from './in-memory-data.service';
+import {MatDialogModule} from '@angular/material/dialog';
+import { CommonModule } from '@angular/common';
+import { DebtorDialogComponent } from './debtor-dialog/debtor-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainScreenComponent,
     HeaderComponent,
-    AddDebtorComponent
+    AddDebtorComponent,
+    DebtorDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +47,9 @@ import { InMemoryDataService } from './in-memory-data.service';
     HttpClientModule,
     HttpClientInMemoryWebApiModule.forRoot(
       InMemoryDataService, { dataEncapsulation: false }
-    )
+    ),
+    MatDialogModule,
+    CommonModule
   ],
   providers: [
     MatDatepickerModule,

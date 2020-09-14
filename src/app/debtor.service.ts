@@ -23,11 +23,28 @@ export class DebtorService {
   }
 
   addDebtor(debtor: Debtor): Observable<DatabaseDebtor>{
+    let databaseDebtor: DatabaseDebtor = this.transformDebtorToDatabaseDebtor(debtor);
+    return this.http.post<DatabaseDebtor>(this.debtorsUrl, databaseDebtor, this.httpOptions);
+  }
+
+  updateDebtor(debtor: Debtor): Observable<any>{
+    let databaseDebtor = this.transformDebtorToDatabaseDebtor(debtor);
+    return this.http.put(this.debtorsUrl, databaseDebtor, this.httpOptions);
+  }
+
+
+  public transformDebtorToDatabaseDebtor(debtor: Debtor): DatabaseDebtor{
     let databaseDebtor : DatabaseDebtor = {id: Date.now(), name: debtor.name, debt: debtor.debt};
     databaseDebtor.paymentDate = debtor.paymentDate ? debtor.paymentDate.toDateString() : null;
     databaseDebtor.loanDate = debtor.loanDate ? debtor.loanDate.toDateString() : null;
-    // console.log("Add debtor", databaseDebtor);
-    return this.http.post<DatabaseDebtor>(this.debtorsUrl, databaseDebtor, this.httpOptions);
+    return databaseDebtor;
+  }
+
+  public transformDatabaseDebtorToDebtor(databaseDebtor: DatabaseDebtor): Debtor{
+    let debtor: Debtor = {name: databaseDebtor.name, debt: databaseDebtor.debt, id: databaseDebtor.id};
+    debtor.loanDate = databaseDebtor.loanDate ? new Date(databaseDebtor.loanDate) : null;
+    debtor.paymentDate = databaseDebtor.paymentDate ? new Date(databaseDebtor.paymentDate) : null;
+    return debtor;
   }
     
 }
