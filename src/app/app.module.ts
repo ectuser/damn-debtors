@@ -24,6 +24,8 @@ import { CommonModule } from '@angular/common';
 import { DebtorDialogComponent } from './debtor-dialog/debtor-dialog.component';
 import { DebtComponent } from './debt/debt.component';
 import {MatCardModule} from '@angular/material/card';
+import { SearchComponent } from './search/search.component';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,8 @@ import {MatCardModule} from '@angular/material/card';
     HeaderComponent,
     AddDebtorComponent,
     DebtorDialogComponent,
-    DebtComponent
+    DebtComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,
@@ -53,7 +56,8 @@ import {MatCardModule} from '@angular/material/card';
     ),
     MatDialogModule,
     CommonModule,
-    MatCardModule
+    MatCardModule,
+    MatAutocompleteModule
   ],
   providers: [
     MatDatepickerModule,

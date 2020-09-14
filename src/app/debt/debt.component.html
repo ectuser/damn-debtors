@@ -3,6 +3,6 @@
         <h2>Name: <span>{{debt?.name}}</span></h2>
         <h2>Debt: <span>{{debt?.debt}}</span></h2>
         <h2 *ngIf="debt?.loanDate">Loan Date: <span>{{debt?.loanDate?.toDateString()}}</span></h2>
-        <h2>Payment Date: <span>{{debt?.paymentDate?.toDateString()}}</span></h2>
+        <h2 *ngIf="debt?.paymentDate">Payment Date: <span>{{debt?.paymentDate?.toDateString()}}</span></h2>
     </mat-card>
 </div>
