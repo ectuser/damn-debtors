@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { DebtorService } from '../debtor.service';
+import { DatabaseDebtor } from '../models/databaseDebtor';
 import {Debtor} from '../models/debtor';
 
 @Component({
@@ -10,7 +12,7 @@ import {Debtor} from '../models/debtor';
 export class AddDebtorComponent implements OnInit {
   addDebtorForm
 
-  constructor(private formBuilder: FormBuilder) { 
+  constructor(private formBuilder: FormBuilder, private debtorService: DebtorService) { 
     this.addDebtorForm = new FormGroup({
       debt: new FormControl(),
       name: new FormControl(""),
@@ -24,6 +26,9 @@ export class AddDebtorComponent implements OnInit {
 
   onSubmit(debtorData: Debtor) {
     console.log(debtorData);
+    this.debtorService.addDebtor(debtorData).subscribe((debtor: DatabaseDebtor) => {
+      // console.log(debtor);
+    });
   }
 
 }
