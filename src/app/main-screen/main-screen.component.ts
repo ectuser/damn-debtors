@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { DebtorService } from '../debtor.service';
+import { DatabaseDebtor } from '../models/databaseDebtor';
 import { Debtor } from '../models/debtor';
 
 
@@ -9,19 +11,17 @@ import { Debtor } from '../models/debtor';
 })
 export class MainScreenComponent implements OnInit {
 
-  constructor() { }
+  constructor(private debtorService: DebtorService) { }
 
   displayedColumns: string[] = ['name', 'debt', 'loanDate', 'paymentDate'];
 
-  dataSource: Debtor[] = [
-    {name: "Alex", debt: 1000, loanDate: new Date("11.05.2020"), paymentDate: new Date("11.11.2020")},
-    {name: "Ivan", debt: 1500, loanDate: new Date("11.05.2020"), paymentDate: new Date("11.11.2020")},
-    {name: "John", debt: 2000, loanDate: new Date("11.05.2020"), paymentDate: new Date("11.11.2020")},
-    {name: "Alfred", debt: 30000, loanDate: new Date("11.05.2020"), paymentDate: new Date("11.11.2020")}
-  ];
+  dataSource: Debtor[] = [];
 
   ngOnInit(): void {
-    console.log(this.dataSource);
+    this.debtorService.getDebtors().subscribe((debtors) => {
+      console.log(debtors);
+      this.dataSource = debtors.map((debtor: DatabaseDebtor) => ({...debtor, paymentDate: new Date(debtor.paymentDate), loanDate: new Date(debtor.loanDate)}));
+    });
   }
 
 }
