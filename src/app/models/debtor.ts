@@ -1,5 +1,5 @@
 export interface Debtor {
-    _id: number;
+    id: number;
     name: string;
     debt: number;
     loanDate?: Date;

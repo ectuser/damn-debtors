@@ -23,7 +23,7 @@ export class DebtorService {
   }
 
   addDebtor(debtor: Debtor): Observable<DatabaseDebtor>{
-    let databaseDebtor : DatabaseDebtor = {_id: Date.now(), name: debtor.name, debt: debtor.debt};
+    let databaseDebtor : DatabaseDebtor = {id: Date.now(), name: debtor.name, debt: debtor.debt};
     databaseDebtor.paymentDate = debtor.paymentDate ? debtor.paymentDate.toDateString() : null;
     databaseDebtor.loanDate = debtor.loanDate ? debtor.loanDate.toDateString() : null;
     // console.log("Add debtor", databaseDebtor);
