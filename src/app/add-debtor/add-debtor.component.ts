@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { DebtorService } from '../debtor.service';
 import { DatabaseDebtor } from '../models/databaseDebtor';
 import {Debtor} from '../models/debtor';
+import {Router} from "@angular/router"
 
 @Component({
   selector: 'app-add-debtor',
@@ -12,10 +13,10 @@ import {Debtor} from '../models/debtor';
 export class AddDebtorComponent implements OnInit {
   addDebtorForm
 
-  constructor(private formBuilder: FormBuilder, private debtorService: DebtorService) { 
+  constructor(private formBuilder: FormBuilder, private debtorService: DebtorService, private router: Router) { 
     this.addDebtorForm = new FormGroup({
       debt: new FormControl(),
-      name: new FormControl(""),
+      name: new FormControl(),
       loanDate: new FormControl(),
       paymentDate: new FormControl()
     })
@@ -28,7 +29,7 @@ export class AddDebtorComponent implements OnInit {
     let debtorObj = {...debtorData, id: Date.now()};
     console.log(debtorObj);
     this.debtorService.addDebtor(debtorObj).subscribe((debtor: DatabaseDebtor) => {
-      // console.log(debtor);
+      this.router.navigate(['/debtors']);
     });
   }
 
