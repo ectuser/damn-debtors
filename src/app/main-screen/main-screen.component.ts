@@ -20,7 +20,12 @@ export class MainScreenComponent implements OnInit {
   ngOnInit(): void {
     this.debtorService.getDebtors().subscribe((debtors) => {
       console.log(debtors);
-      this.dataSource = debtors.map((debtor: DatabaseDebtor) => ({...debtor, paymentDate: new Date(debtor.paymentDate), loanDate: new Date(debtor.loanDate)}));
+      this.dataSource = debtors.map(debtor => {
+        let obj: Debtor = {_id: debtor._id, debt: debtor.debt, name: debtor.name};
+        obj.loanDate = debtor.loanDate ? new Date(debtor.loanDate) : null;
+        obj.paymentDate = debtor.paymentDate ? new Date(debtor.paymentDate) : null;
+        return obj;
+      });
     });
   }
 

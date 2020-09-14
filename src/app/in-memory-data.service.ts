@@ -11,8 +11,8 @@ export class InMemoryDataService implements InMemoryDbService {
     const debtors: DatabaseDebtor[] = [
       {_id: 1, name: "Alex", debt: 1000, loanDate: "2020-11-04T17:00:00.000Z", paymentDate: "2020-11-10T17:00:00.000Z"},
       {_id: 2, name: "Ivan", debt: 1500, loanDate: "2020-11-04T17:00:00.000Z", paymentDate: "2020-11-10T17:00:00.000Z"},
-      {_id: 3, name: "John", debt: 2000, loanDate: "2020-11-04T17:00:00.000Z", paymentDate: "2020-11-10T17:00:00.000Z"},
-      {_id: 4, name: "Alfred", debt: 30000, loanDate: "2020-11-04T17:00:00.000Z", paymentDate: "2020-11-10T17:00:00.000Z"}
+      {_id: 3, name: "John", debt: 2000, paymentDate: "2020-11-10T17:00:00.000Z"},
+      {_id: 4, name: "Alfred", debt: 30000, loanDate: "2020-11-04T17:00:00.000Z"}
     ];
     return {debtors};
   }
