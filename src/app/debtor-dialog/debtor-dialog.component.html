@@ -29,6 +29,8 @@
         <mat-datepicker #paymentDatePicker></mat-datepicker>
       </mat-form-field>
     </div>
-    <button mat-raised-button color="primary" type="submit">Save</button>
-    <button mat-raised-button color="accent" type="button" (click)="deleteDebtor()">Delete</button>
+    <div>
+      <button class="save-button" mat-raised-button color="primary" type="submit">Save</button>
+      <button class="delete-button" mat-raised-button color="accent" type="button" (click)="deleteDebtor()">Delete</button>
+    </div>
 </form>

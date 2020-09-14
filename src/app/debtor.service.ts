@@ -40,6 +40,10 @@ export class DebtorService {
     return this.http.delete<DatabaseDebtor>(url, this.httpOptions);
   }
 
+  findDebtById(id: number): Observable<DatabaseDebtor>{
+    const url = `${this.debtorsUrl}/${id}`;
+    return this.http.get<DatabaseDebtor>(url);
+  }
 
   public transformDebtorToDatabaseDebtor(debtor: Debtor): DatabaseDebtor{
     let databaseDebtor : DatabaseDebtor = {id: debtor.id, name: debtor.name, debt: debtor.debt};

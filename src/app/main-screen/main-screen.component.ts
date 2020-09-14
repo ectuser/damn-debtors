@@ -28,11 +28,15 @@ export class MainScreenComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed', result);
-      // this.animal = result;
+      this.getDebts();
     });
   }
 
   ngOnInit(): void {
+    this.getDebts();
+  }
+
+  getDebts(){
     this.debtorService.getDebtors().subscribe((debtors) => {
       console.log(debtors);
       this.dataSource = debtors.map((debtor: DatabaseDebtor) => {

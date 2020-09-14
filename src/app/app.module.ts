@@ -22,6 +22,8 @@ import { InMemoryDataService } from './in-memory-data.service';
 import {MatDialogModule} from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { DebtorDialogComponent } from './debtor-dialog/debtor-dialog.component';
+import { DebtComponent } from './debt/debt.component';
+import {MatCardModule} from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,8 @@ import { DebtorDialogComponent } from './debtor-dialog/debtor-dialog.component';
     MainScreenComponent,
     HeaderComponent,
     AddDebtorComponent,
-    DebtorDialogComponent
+    DebtorDialogComponent,
+    DebtComponent
   ],
   imports: [
     BrowserModule,
@@ -49,7 +52,8 @@ import { DebtorDialogComponent } from './debtor-dialog/debtor-dialog.component';
       InMemoryDataService, { dataEncapsulation: false }
     ),
     MatDialogModule,
-    CommonModule
+    CommonModule,
+    MatCardModule
   ],
   providers: [
     MatDatepickerModule,
