@@ -36,4 +36,8 @@ export class DebtorDialogComponent {
     });
     this.dialogRef.close();
   }
+
+  deleteDebtor(){
+    this.debtorService.deleteDebtor(this.data).subscribe();
+  }
 }

@@ -33,6 +33,13 @@ export class DebtorService {
     return this.http.put(this.debtorsUrl, databaseDebtor, this.httpOptions);
   }
 
+  deleteDebtor(debtor: Debtor): Observable<DatabaseDebtor>{
+    let databaseDebtor: DatabaseDebtor = this.transformDebtorToDatabaseDebtor(debtor);
+    console.log("delete ", databaseDebtor);
+    const url = `${this.debtorsUrl}/${databaseDebtor.id}`;
+    return this.http.delete<DatabaseDebtor>(url, this.httpOptions);
+  }
+
 
   public transformDebtorToDatabaseDebtor(debtor: Debtor): DatabaseDebtor{
     let databaseDebtor : DatabaseDebtor = {id: debtor.id, name: debtor.name, debt: debtor.debt};
