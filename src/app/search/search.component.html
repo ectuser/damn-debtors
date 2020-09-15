@@ -1,3 +1,4 @@
+<div *ngFor="let option of data | async">{{option}}</div>
 <form [formGroup]="formGroup">
     <mat-form-field class="w-100">
       <input type="text"
@@ -14,7 +15,7 @@
       </mat-autocomplete> -->
     </mat-form-field>
 
-    <mat-card *ngFor="let debt of shownDebts" class="card" routerLink="/debts/{{debt.id}}">
+    <mat-card *ngFor="let debt of debts | async" class="card" routerLink="/debts/{{debt.id}}">
       <h2><mat-icon>person</mat-icon>Name: <span>{{debt?.name}}</span></h2>
       <h2><mat-icon>attach_money</mat-icon>Debt: <span>{{debt?.debt}}</span></h2>
       <h2 *ngIf="debt?.loanDate"><mat-icon>calendar_today</mat-icon>Loan Date: <span>{{debt?.loanDate?.toDateString()}}</span></h2>
