@@ -1,0 +1,11 @@
+.parent {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+.child div{
+    text-align: center;
+    font-size: 70px;
+    margin-bottom: 60px;
+}

@@ -1,8 +1,8 @@
 import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DebtorService } from '../debtor.service';
-import { Debtor } from '../models/debtor';
+import { DebtService } from '../debtor.service';
+import { Debt } from '../models/debt';
 
 @Component({
   selector: 'app-debtor-dialog',
@@ -10,12 +10,12 @@ import { Debtor } from '../models/debtor';
   styleUrls: ['./debtor-dialog.component.scss']
 })
 export class DebtorDialogComponent {
-  addDebtorForm;
+  addDebtForm;
   constructor(
     public dialogRef: MatDialogRef<DebtorDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Debtor, 
-    private debtorService: DebtorService) {
-      this.addDebtorForm = new FormGroup({
+    @Inject(MAT_DIALOG_DATA) public data: Debt, 
+    private debtorService: DebtService) {
+      this.addDebtForm = new FormGroup({
         debt: new FormControl(data.debt),
         name: new FormControl(data.name),
         loanDate: new FormControl(data.loanDate),
@@ -23,16 +23,16 @@ export class DebtorDialogComponent {
       })
     }
 
-  onSubmit(formValues: Debtor): void {
+  onSubmit(formValues: Debt): void {
     console.log(formValues);
-    let newDebtorObject: Debtor = {id: this.data.id ,...formValues};
-    this.debtorService.updateDebtor(newDebtorObject).subscribe(() => {
+    let newDebtorObject: Debt = {id: this.data.id ,...formValues};
+    this.debtorService.updateDebt(newDebtorObject).subscribe(() => {
     });
     this.dialogRef.close();
   }
 
   deleteDebtor(){
-    this.debtorService.deleteDebtor(this.data).subscribe();
+    this.debtorService.deleteDebt(this.data).subscribe();
     this.dialogRef.close();
     
   }

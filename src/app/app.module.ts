@@ -26,6 +26,7 @@ import { DebtComponent } from './debt/debt.component';
 import {MatCardModule} from '@angular/material/card';
 import { SearchComponent } from './search/search.component';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import {MatAutocompleteModule} from '@angular/material/autocomplete';
     AddDebtorComponent,
     DebtorDialogComponent,
     DebtComponent,
-    SearchComponent
+    SearchComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,

@@ -1,62 +1,62 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Debtor } from './models/debtor';
-import { DatabaseDebtor } from './models/databaseDebtor';
+import { Debt } from './models/debt';
+import { DatabaseDebt } from './models/databaseDebt';
 
 @Injectable({
   providedIn: 'root'
 })
-export class DebtorService {
+export class DebtService {
 
-  private debtorsUrl = 'api/debtors';
+  private debtsUrl = 'api/debts';
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
   constructor(private http: HttpClient) { }
 
-  getDebtors(): Observable<DatabaseDebtor[]> {
-    const data = this.http.get<DatabaseDebtor[]>(this.debtorsUrl);
+  getDebts(): Observable<DatabaseDebt[]> {
+    const data = this.http.get<DatabaseDebt[]>(this.debtsUrl);
     console.log(data);
     return data;
   }
 
-  addDebtor(debtor: Debtor): Observable<DatabaseDebtor>{
-    let databaseDebtor: DatabaseDebtor = this.transformDebtorToDatabaseDebtor(debtor);
-    return this.http.post<DatabaseDebtor>(this.debtorsUrl, databaseDebtor, this.httpOptions);
+  addDebt(debtor: Debt): Observable<DatabaseDebt>{
+    let databaseDebtor: DatabaseDebt = this.transformDebtToDatabaseDebt(debtor);
+    return this.http.post<DatabaseDebt>(this.debtsUrl, databaseDebtor, this.httpOptions);
   }
 
-  updateDebtor(debtor: Debtor): Observable<any>{
-    let databaseDebtor = this.transformDebtorToDatabaseDebtor(debtor);
-    console.log(databaseDebtor);
-    return this.http.put(this.debtorsUrl, databaseDebtor, this.httpOptions);
+  updateDebt(debtor: Debt): Observable<any>{
+    let databaseDebt = this.transformDebtToDatabaseDebt(debtor);
+    console.log(databaseDebt);
+    return this.http.put(this.debtsUrl, databaseDebt, this.httpOptions);
   }
 
-  deleteDebtor(debtor: Debtor): Observable<DatabaseDebtor>{
-    let databaseDebtor: DatabaseDebtor = this.transformDebtorToDatabaseDebtor(debtor);
-    console.log("delete ", databaseDebtor);
-    const url = `${this.debtorsUrl}/${databaseDebtor.id}`;
-    return this.http.delete<DatabaseDebtor>(url, this.httpOptions);
+  deleteDebt(debt: Debt): Observable<DatabaseDebt>{
+    let databaseDebt: DatabaseDebt = this.transformDebtToDatabaseDebt(debt);
+    console.log("delete ", databaseDebt);
+    const url = `${this.debtsUrl}/${databaseDebt.id}`;
+    return this.http.delete<DatabaseDebt>(url, this.httpOptions);
   }
 
-  findDebtById(id: number): Observable<DatabaseDebtor>{
-    const url = `${this.debtorsUrl}/${id}`;
-    return this.http.get<DatabaseDebtor>(url);
+  findDebtById(id: number): Observable<DatabaseDebt>{
+    const url = `${this.debtsUrl}/${id}`;
+    return this.http.get<DatabaseDebt>(url);
   }
 
-  public transformDebtorToDatabaseDebtor(debtor: Debtor): DatabaseDebtor{
-    let databaseDebtor : DatabaseDebtor = {id: debtor.id, name: debtor.name, debt: debtor.debt};
-    databaseDebtor.paymentDate = debtor.paymentDate ? debtor.paymentDate.toDateString() : null;
-    databaseDebtor.loanDate = debtor.loanDate ? debtor.loanDate.toDateString() : null;
+  public transformDebtToDatabaseDebt(debt: Debt): DatabaseDebt{
+    let databaseDebtor : DatabaseDebt = {id: debt.id, name: debt.name, debt: debt.debt};
+    databaseDebtor.paymentDate = debt.paymentDate ? debt.paymentDate.toDateString() : null;
+    databaseDebtor.loanDate = debt.loanDate ? debt.loanDate.toDateString() : null;
     return databaseDebtor;
   }
 
-  public transformDatabaseDebtorToDebtor(databaseDebtor: DatabaseDebtor): Debtor{
-    let debtor: Debtor = {name: databaseDebtor.name, debt: databaseDebtor.debt, id: databaseDebtor.id};
-    debtor.loanDate = databaseDebtor.loanDate ? new Date(databaseDebtor.loanDate) : null;
-    debtor.paymentDate = databaseDebtor.paymentDate ? new Date(databaseDebtor.paymentDate) : null;
-    return debtor;
+  public transformDatabaseDebtToDebt(databaseDebt: DatabaseDebt): Debt{
+    let debt: Debt = {name: databaseDebt.name, debt: databaseDebt.debt, id: databaseDebt.id};
+    debt.loanDate = databaseDebt.loanDate ? new Date(databaseDebt.loanDate) : null;
+    debt.paymentDate = databaseDebt.paymentDate ? new Date(databaseDebt.paymentDate) : null;
+    return debt;
   }
     
 }
