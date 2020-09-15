@@ -7,17 +7,18 @@ import { SearchComponent } from './search/search.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 
 const routes: Routes = [
-  {path: "", redirectTo: '/debts', pathMatch: "full"},
-  {path: "add", component: AddDebtorComponent},
-  {path: "debts", component: MainScreenComponent},
-  {path: "debts/:id", component: DebtComponent},
-  {path: "search", component: SearchComponent},
-  {path: '**', redirectTo: '/404'},
-  {path: "404", component: NotFoundComponent}
+  { path: '', redirectTo: '/debts', pathMatch: 'full' },
+  { path: 'add', component: AddDebtorComponent },
+  { path: 'debts', component: MainScreenComponent },
+  { path: 'debts/:id', component: DebtComponent },
+  { path: 'search', component: SearchComponent },
 ];
+
+// {path: '**', redirectTo: '/404'},
+// {path: "404", component: NotFoundComponent}
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

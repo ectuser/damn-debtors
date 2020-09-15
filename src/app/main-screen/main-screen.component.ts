@@ -11,6 +11,8 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { DebtorDialogComponent } from '../debtor-dialog/debtor-dialog.component';
 import { CloseDialogStates } from '../debtor-dialog/closeDialogStates';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { HttpClient } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-main-screen',
@@ -19,9 +21,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class MainScreenComponent implements OnInit {
   constructor(
-    private debtorService: DebtService,
+    private debtService: DebtService,
     public dialog: MatDialog,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private http: HttpClient
   ) {}
 
   displayedColumns: string[] = ['name', 'debt', 'loanDate', 'paymentDate'];
@@ -58,10 +61,10 @@ export class MainScreenComponent implements OnInit {
   }
 
   getDebts() {
-    this.debtorService.getDebts().subscribe((debtors) => {
-      console.log(debtors);
-      this.dataSource = debtors.map((debtor: DatabaseDebt) => {
-        let obj: Debt = this.debtorService.transformDatabaseDebtToDebt(debtor);
+    this.debtService.getDebts().subscribe((debts) => {
+      console.log(debts);
+      this.dataSource = debts.map((debtor: DatabaseDebt) => {
+        let obj: Debt = this.debtService.transformDatabaseDebtToDebt(debtor);
         return obj;
       });
     });
