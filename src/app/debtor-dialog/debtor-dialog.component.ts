@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DebtService } from '../debtor.service';
 import { Debt } from '../models/debt';
+import { CloseDialogStates } from './closeDialogStates';
 
 @Component({
   selector: 'app-debtor-dialog',
@@ -28,11 +29,11 @@ export class DebtorDialogComponent {
     console.log(formValues);
     let newDebtorObject: Debt = { id: this.data.id, ...formValues };
     this.debtorService.updateDebt(newDebtorObject).subscribe(() => {});
-    this.dialogRef.close();
+    this.dialogRef.close(CloseDialogStates.Updated);
   }
 
   deleteDebt() {
     this.debtorService.deleteDebt(this.data).subscribe();
-    this.dialogRef.close();
+    this.dialogRef.close(CloseDialogStates.Deleted);
   }
 }

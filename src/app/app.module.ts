@@ -6,27 +6,28 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MainScreenComponent } from './main-screen/main-screen.component';
 import { HeaderComponent } from './header/header.component';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatTableModule} from '@angular/material/table';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTableModule } from '@angular/material/table';
 import { AddDebtorComponent } from './add-debtor/add-debtor.component';
-import { MatIconModule } from '@angular/material/icon'
-import {MatButtonModule} from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
-import {MatInputModule} from '@angular/material/input';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { InMemoryDataService } from './in-memory-data.service';
-import {MatDialogModule} from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { DebtorDialogComponent } from './debtor-dialog/debtor-dialog.component';
 import { DebtComponent } from './debt/debt.component';
-import {MatCardModule} from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
 import { SearchComponent } from './search/search.component';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
     DebtorDialogComponent,
     DebtComponent,
     SearchComponent,
-    NotFoundComponent
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,
@@ -53,18 +54,16 @@ import { NotFoundComponent } from './not-found/not-found.component';
     MatDatepickerModule,
     MatNativeDateModule,
     HttpClientModule,
-    HttpClientInMemoryWebApiModule.forRoot(
-      InMemoryDataService, { dataEncapsulation: false }
-    ),
+    HttpClientInMemoryWebApiModule.forRoot(InMemoryDataService, {
+      dataEncapsulation: false,
+    }),
     MatDialogModule,
     CommonModule,
     MatCardModule,
-    MatAutocompleteModule
+    MatAutocompleteModule,
+    MatSnackBarModule,
   ],
-  providers: [
-    MatDatepickerModule,
-    MatNativeDateModule
-  ],
-  bootstrap: [AppComponent]
+  providers: [MatDatepickerModule, MatNativeDateModule],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
