@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { DebtorService } from '../debtor.service';
-import { DatabaseDebtor } from '../models/databaseDebtor';
-import {Debtor} from '../models/debtor';
+import { DebtService } from '../debtor.service';
+import { DatabaseDebt } from '../models/databaseDebt';
+import {Debt} from '../models/debt';
 import {Router} from "@angular/router"
 
 @Component({
@@ -13,7 +13,7 @@ import {Router} from "@angular/router"
 export class AddDebtorComponent implements OnInit {
   addDebtorForm
 
-  constructor(private formBuilder: FormBuilder, private debtorService: DebtorService, private router: Router) { 
+  constructor(private formBuilder: FormBuilder, private debtorService: DebtService, private router: Router) { 
     this.addDebtorForm = new FormGroup({
       debt: new FormControl(),
       name: new FormControl(),
@@ -25,10 +25,10 @@ export class AddDebtorComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onSubmit(debtorData) {
-    let debtorObj = {...debtorData, id: Date.now()};
-    console.log(debtorObj);
-    this.debtorService.addDebtor(debtorObj).subscribe((debtor: DatabaseDebtor) => {
+  onSubmit(debtData) {
+    let debtObj = {...debtData, id: Date.now()};
+    console.log(debtObj);
+    this.debtorService.addDebt(debtObj).subscribe((debt: DatabaseDebt) => {
       this.router.navigate(['/debtors']);
     });
   }

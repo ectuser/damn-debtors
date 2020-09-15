@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DebtorService } from '../debtor.service';
-import { Debtor } from '../models/debtor';
+import { DebtService } from '../debtor.service';
+import { Debt } from '../models/debt';
 
 @Component({
   selector: 'app-debt',
@@ -10,8 +10,8 @@ import { Debtor } from '../models/debtor';
 })
 export class DebtComponent implements OnInit {
   private id;
-  debt: Debtor;
-  constructor(private activatedRoute: ActivatedRoute, private router: Router, private debtorsService: DebtorService) { }
+  debt: Debt;
+  constructor(private activatedRoute: ActivatedRoute, private router: Router, private debtorsService: DebtService) { }
 
   ngOnInit(): void {
     this.id = Number(this.activatedRoute.snapshot.paramMap.get('id'));
@@ -21,7 +21,7 @@ export class DebtComponent implements OnInit {
     }
 
     this.debtorsService.findDebtById(this.id).subscribe((debtDB) => {
-      let debt = this.debtorsService.transformDatabaseDebtorToDebtor(debtDB);
+      let debt = this.debtorsService.transformDatabaseDebtToDebt(debtDB);
       this.debt = debt;
       console.log(debt);
     }, 

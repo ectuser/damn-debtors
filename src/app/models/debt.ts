@@ -1,4 +1,4 @@
-export interface Debtor {
+export interface Debt {
     id: number;
     name: string;
     debt: number;
