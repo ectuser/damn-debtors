@@ -17,7 +17,7 @@ export class DebtorService {
   constructor(private http: HttpClient) { }
 
   getDebtors(): Observable<DatabaseDebtor[]> {
-    let data = this.http.get<DatabaseDebtor[]>(this.debtorsUrl);
+    const data = this.http.get<DatabaseDebtor[]>(this.debtorsUrl);
     console.log(data);
     return data;
   }

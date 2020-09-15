@@ -14,28 +14,24 @@ export class SearchComponent implements OnInit {
   formGroup = new FormGroup({
     control: new FormControl()
   });
-  debts: Observable<Debtor[]>;
-  shownDebts: Observable<Debtor[]>;
+  debts: Debtor[];
+  shownDebts: Debtor[];
   data
   constructor(private debtorService: DebtorService) { }
 
   ngOnInit(): void {
-    this.debts = this.debtorService.getDebtors().pipe(
-      map(dbDebts => dbDebts.map(dbDebt => this.debtorService.transformDatabaseDebtorToDebtor(dbDebt)))
-    );
-    // this.debtorService.getDebtors().subscribe((dbDebts) => {
-    //   const debts = dbDebts.map(dbDebt => this.debtorService.transformDatabaseDebtorToDebtor(dbDebt));
-    //   this.debts = [...debts];
-    // });
 
-    // this.shownDebts = this.formGroup.get('control').valueChanges.pipe(
-    //   map(value => this._filter(value))
-    // );
-  }
+    this.debtorService.getDebtors()
+      .subscribe((dbDebts) => {
+        const debts = dbDebts.map(dbDebt => this.debtorService.transformDatabaseDebtorToDebtor(dbDebt));
+        this.debts = [...debts];
+        this.shownDebts = [...debts];
+      });
 
-  private _filter(value: string): Debtor[] {
-    const filterValue = value.toLowerCase();
-    return this.debts.filter(debt => debt.name.toLowerCase().indexOf(filterValue) === 0);
+    this.formGroup.get('control').valueChanges
+      .subscribe((value) => {
+        this.shownDebts = this.debts.filter(debt => debt.name.toLowerCase().indexOf(value) === 0);
+      })
   }
 
 }
