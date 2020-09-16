@@ -3,6 +3,9 @@ import express = require('express');
 import path = require('path');
 import bodyParser = require('body-parser');
 
+import Datastore = require('nedb-promises');
+const debtsDb = Datastore.create('server/db/debts.db');
+
 const app = express();
 const PORT = process.env.PORT || 8080;
 
@@ -11,105 +14,112 @@ app.use(express.static('./dist/damn-debtors'));
 app.use(bodyParser.json());
 
 // DB
-let debts: DatabaseDebt[] = [
-  {
-    id: 1,
-    name: 'Alex',
-    debt: 1000,
-    loanDate: '2020-11-04T17:00:00.000Z',
-    paymentDate: '2020-11-10T17:00:00.000Z',
-  },
-  {
-    id: 2,
-    name: 'Ivan',
-    debt: 1500,
-    loanDate: '2020-11-04T17:00:00.000Z',
-    paymentDate: '2020-11-10T17:00:00.000Z',
-  },
-  {
-    id: 3,
-    name: 'Alfred',
-    debt: 100,
-    loanDate: '2020-11-04T17:00:00.000Z',
-  },
-  {
-    id: 4,
-    name: 'John',
-    debt: 1500,
-    loanDate: '2020-11-04T17:00:00.000Z',
-    paymentDate: '2020-05-22T17:00:00.000Z',
-  },
-];
+// let debts: DatabaseDebt[] = [
+//   {
+//     id: 1,
+//     name: 'Alex',
+//     debt: 1000,
+//     loanDate: '2020-11-04T17:00:00.000Z',
+//     paymentDate: '2020-11-10T17:00:00.000Z',
+//   },
+//   {
+//     id: 2,
+//     name: 'Ivan',
+//     debt: 1500,
+//     loanDate: '2020-11-04T17:00:00.000Z',
+//     paymentDate: '2020-11-10T17:00:00.000Z',
+//   },
+//   {
+//     id: 3,
+//     name: 'Alfred',
+//     debt: 100,
+//     loanDate: '2020-11-04T17:00:00.000Z',
+//   },
+//   {
+//     id: 4,
+//     name: 'John',
+//     debt: 1500,
+//     loanDate: '2020-11-04T17:00:00.000Z',
+//     paymentDate: '2020-05-22T17:00:00.000Z',
+//   },
+// ];
+// (async function () {
+//   for (const debt of debts) {
+//     await debtsDb.insert(debt);
+//   }
+// })();
 
 // API
-app.get('/api/debts', function (req, res) {
-  res.json(debts);
+app.get('/api/debts', async function (req, res) {
+  try {
+    const debts = await debtsDb.find({});
+    res.json(debts);
+  } catch (error) {
+    res.status(500).send('Something went wrong');
+  }
 });
-app.get('/api/debts/:id', function (req, res) {
+app.get('/api/debts/:id', async function (req, res) {
   const debtId = Number(req.params.id);
   if (!debtId) {
     res.status(400).send('Bad Request');
     return;
   }
   console.log(debtId);
-  const debt = debts.find((el) => el.id === debtId);
+  const debt = await debtsDb.findOne({ id: debtId });
+  console.log(debt);
   if (debt) {
     res.json(debt);
   } else {
     res.status(404).send('Not found');
   }
 });
-app.post('/api/debt', (req, res) => {
-  if (req.body.name && req.body.debt) {
-    const id = Date.now();
-    const debt: DatabaseDebt = { ...req.body, id };
-    debts.push(debt);
-    const addedDebt = debts.find((el) => el.id === id);
-    if (addedDebt) {
-      res.status(201).json(addedDebt);
-      return;
-    }
+app.post('/api/debt', async (req, res) => {
+  if (!req.body.name || !req.body.debt) {
+    res.status(400).send('Bad params');
+    return;
   }
-  res.status(400).send('Bad params');
+  const id = Date.now();
+  const debt: DatabaseDebt = { ...req.body, id };
+  const inderted = await debtsDb.insert({ ...debt });
+  const addedDebt = await debtsDb.findOne({ _id: inderted._id });
+  if (!addedDebt) {
+    res.status(500).send('Something went wrong');
+    return;
+  }
+  res.status(201).json(addedDebt);
 });
-app.put('/api/debt/:id', (req, res) => {
+app.put('/api/debt/:id', async (req, res) => {
   const debtId = Number(req.params.id);
   if (!debtId) {
     res.status(400).send('Bad Request');
-    return;
-  }
-  let debt = debts.find((el) => el.id === debtId);
-  const debtIndex = debts.indexOf(debt);
-  if (!debt) {
-    res.status(404).send('Not found');
     return;
   }
   if (!req.body.name || !req.body.debt) {
     res.status(400).send('Bad params');
+    return;
   }
-  debt = { ...req.body, id: debtId };
-  debts[debtIndex] = { ...debt };
-
-  const addedDebt = debts.find((el) => el.id === debtId);
-  if (!addedDebt) {
-    res.status(400).send('Something went wrong');
+  const updatedDebt = await debtsDb.update(
+    { id: debtId },
+    { id: debtId, ...req.body }
+  );
+  if (updatedDebt) {
+    res.json('Successfully updated');
+  } else {
+    res.status(500).send('Something went wrong');
   }
-  res.json(addedDebt);
 });
-app.delete('/api/debt/:id', (req, res) => {
+app.delete('/api/debt/:id', async (req, res) => {
   const debtId = Number(req.params.id);
   if (!debtId) {
     res.status(400).send('Bad Request');
     return;
   }
-  let debt = debts.find((el) => el.id === debtId);
-  const debtIndex = debts.indexOf(debt);
-  if (!debt) {
-    res.status(404).send('Not found');
-    return;
+  let result = await debtsDb.remove({ id: debtId }, {});
+  if (result) {
+    res.status(200).send('Successfully deleted');
+  } else {
+    res.status(500).send('Something went wrong');
   }
-  debts.splice(debtIndex, 1);
-  res.status(200).send('Successfully deleted');
 });
 
 app.get('/*', function (req, res) {
