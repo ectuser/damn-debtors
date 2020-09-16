@@ -1,10 +1,4 @@
-{"id":1600239079040,"name":"Dmitry","debt":3500,"paymentDate":"Thu Sep 17 2020","loanDate":null,"_id":"2AJhTjzrKUBE1iGi"}
-{"name":"Dmitry","debt":1111,"id":1600236620037,"_id":"JrGFjo617eWReAhb"}
-{"id":4,"name":"John","debt":1500,"loanDate":"2020-11-04T17:00:00.000Z","paymentDate":"2020-05-22T17:00:00.000Z","_id":"L1JAraCaeuHIboH0"}
-{"id":1,"name":"Ivan","debt":2280,"paymentDate":null,"loanDate":"Wed Nov 11 2015","_id":"s0clG3Qql0nAMDnu"}
-{"id":1600236620037,"name":"Dmitry","debt":1111,"paymentDate":"Tue Sep 01 2020","loanDate":null,"_id":"JrGFjo617eWReAhb"}
-{"id":1600239174153,"name":"Alfred","debt":30000,"paymentDate":null,"loanDate":"Fri Sep 25 2020","_id":"jOFEGRBwNbdybAG7"}
-{"id":1600239252108,"name":"123","debt":123,"paymentDate":null,"loanDate":null,"_id":"pnpOLZ8et43GC0gh"}
-{"$$deleted":true,"_id":"pnpOLZ8et43GC0gh"}
-{"$$deleted":true,"_id":"JrGFjo617eWReAhb"}
-{"id":1,"name":"Ivan","debt":2280,"paymentDate":"Thu Sep 24 2020","loanDate":"Wed Nov 11 2015","_id":"s0clG3Qql0nAMDnu"}
+{"id":1600242578002,"name":"John","debt":1500,"paymentDate":null,"loanDate":null,"_id":"DVOYovAG8zwAdjDO"}
+{"id":1600239374279,"name":"1","debt":1,"paymentDate":null,"loanDate":"Wed Sep 09 2020","_id":"EUnFH4aNnZYiyQ7h"}
+{"id":1600242585884,"name":"Dmitry","debt":1700,"paymentDate":null,"loanDate":null,"_id":"FttcJSnFjemqEJPn"}
+{"id":1600242571160,"name":"Ivan","debt":1000,"paymentDate":null,"loanDate":null,"_id":"aTlfpX9n7wRJMmfK"}

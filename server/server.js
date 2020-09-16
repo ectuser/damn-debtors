@@ -56,41 +56,6 @@ var PORT = process.env.PORT || 8080;
 // Serve only the static files form the dist directory
 app.use(express.static('./dist/damn-debtors'));
 app.use(bodyParser.json());
-// DB
-// let debts: DatabaseDebt[] = [
-//   {
-//     id: 1,
-//     name: 'Alex',
-//     debt: 1000,
-//     loanDate: '2020-11-04T17:00:00.000Z',
-//     paymentDate: '2020-11-10T17:00:00.000Z',
-//   },
-//   {
-//     id: 2,
-//     name: 'Ivan',
-//     debt: 1500,
-//     loanDate: '2020-11-04T17:00:00.000Z',
-//     paymentDate: '2020-11-10T17:00:00.000Z',
-//   },
-//   {
-//     id: 3,
-//     name: 'Alfred',
-//     debt: 100,
-//     loanDate: '2020-11-04T17:00:00.000Z',
-//   },
-//   {
-//     id: 4,
-//     name: 'John',
-//     debt: 1500,
-//     loanDate: '2020-11-04T17:00:00.000Z',
-//     paymentDate: '2020-05-22T17:00:00.000Z',
-//   },
-// ];
-// (async function () {
-//   for (const debt of debts) {
-//     await debtsDb.insert(debt);
-//   }
-// })();
 // API
 app.get('/api/debts', function (req, res) {
     return __awaiter(this, void 0, void 0, function () {
@@ -212,6 +177,24 @@ app["delete"]('/api/debts/:id', function (req, res) { return __awaiter(void 0, v
                 else {
                     res.status(500).send('Something went wrong');
                 }
+                return [2 /*return*/];
+        }
+    });
+}); });
+app.get('/search', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var query, regex, debts;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                query = req.query.searchData;
+                if (!query) {
+                    res.status(400).send('Bad request');
+                }
+                regex = new RegExp("" + query);
+                return [4 /*yield*/, debtsDb.find({ name: regex })];
+            case 1:
+                debts = _a.sent();
+                res.send(debts);
                 return [2 /*return*/];
         }
     });

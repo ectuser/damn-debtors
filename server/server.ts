@@ -13,42 +13,6 @@ const PORT = process.env.PORT || 8080;
 app.use(express.static('./dist/damn-debtors'));
 app.use(bodyParser.json());
 
-// DB
-// let debts: DatabaseDebt[] = [
-//   {
-//     id: 1,
-//     name: 'Alex',
-//     debt: 1000,
-//     loanDate: '2020-11-04T17:00:00.000Z',
-//     paymentDate: '2020-11-10T17:00:00.000Z',
-//   },
-//   {
-//     id: 2,
-//     name: 'Ivan',
-//     debt: 1500,
-//     loanDate: '2020-11-04T17:00:00.000Z',
-//     paymentDate: '2020-11-10T17:00:00.000Z',
-//   },
-//   {
-//     id: 3,
-//     name: 'Alfred',
-//     debt: 100,
-//     loanDate: '2020-11-04T17:00:00.000Z',
-//   },
-//   {
-//     id: 4,
-//     name: 'John',
-//     debt: 1500,
-//     loanDate: '2020-11-04T17:00:00.000Z',
-//     paymentDate: '2020-05-22T17:00:00.000Z',
-//   },
-// ];
-// (async function () {
-//   for (const debt of debts) {
-//     await debtsDb.insert(debt);
-//   }
-// })();
-
 // API
 app.get('/api/debts', async function (req, res) {
   try {
@@ -120,6 +84,15 @@ app.delete('/api/debts/:id', async (req, res) => {
   } else {
     res.status(500).send('Something went wrong');
   }
+});
+app.get('/search', async (req, res) => {
+  const query = req.query.searchData;
+  if (!query) {
+    res.status(400).send('Bad request');
+  }
+  const regex = new RegExp(`${query}`);
+  const debts = await debtsDb.find({ name: regex });
+  res.send(debts);
 });
 
 app.get('/*', function (req, res) {
