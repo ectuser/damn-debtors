@@ -2,8 +2,8 @@ import { DatabaseDebt } from '../src/app/models/databaseDebt';
 import express = require('express');
 import path = require('path');
 import bodyParser = require('body-parser');
-
 import Datastore = require('nedb-promises');
+
 const debtsDb = Datastore.create('server/db/debts.db');
 
 const app = express();
@@ -85,12 +85,12 @@ app.delete('/api/debts/:id', async (req, res) => {
     res.status(500).send('Something went wrong');
   }
 });
-app.get('/search', async (req, res) => {
+app.get('/api/search', async (req, res) => {
   const query = req.query.searchData;
   if (!query) {
     res.status(400).send('Bad request');
   }
-  const regex = new RegExp(`${query}`);
+  const regex = new RegExp(`${query}`, 'i');
   const debts = await debtsDb.find({ name: regex });
   res.send(debts);
 });
