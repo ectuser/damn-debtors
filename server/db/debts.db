@@ -1,0 +1,6 @@
+{"name":"Dmitry","debt":1111,"id":1600236620037,"_id":"JrGFjo617eWReAhb"}
+{"id":4,"name":"John","debt":1500,"loanDate":"2020-11-04T17:00:00.000Z","paymentDate":"2020-05-22T17:00:00.000Z","_id":"L1JAraCaeuHIboH0"}
+{"id":1,"name":"Ivan","debt":228,"loanDate":"2015-11-10T17:00:00.000Z","_id":"s0clG3Qql0nAMDnu"}
+{"id":2,"name":"John","debt":125,"loanDate":"2015-11-10T17:00:00.000Z","_id":"tYyH36EPq3i2EW1W"}
+{"name":"Zakhar","debt":1337,"id":1600236673980,"_id":"tz6hiJaNUJjz1gA2"}
+{"$$deleted":true,"_id":"tz6hiJaNUJjz1gA2"}
