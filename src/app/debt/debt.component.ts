@@ -6,30 +6,30 @@ import { Debt } from '../models/debt';
 @Component({
   selector: 'app-debt',
   templateUrl: './debt.component.html',
-  styleUrls: ['./debt.component.scss']
+  styleUrls: ['./debt.component.scss'],
 })
 export class DebtComponent implements OnInit {
-  private id;
+  private id: string;
   debt: Debt;
-  constructor(private activatedRoute: ActivatedRoute, private router: Router, private debtorsService: DebtService) { }
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private router: Router,
+    private debtorsService: DebtService
+  ) {}
 
   ngOnInit(): void {
-    this.id = Number(this.activatedRoute.snapshot.paramMap.get('id'));
-    if (isNaN(this.id)){
-      console.log("Wrong path");
-      this.router.navigate(['/debtors']);
-    }
+    this.id = this.activatedRoute.snapshot.paramMap.get('id');
 
-    this.debtorsService.findDebtById(this.id).subscribe((debtDB) => {
-      let debt = this.debtorsService.transformDatabaseDebtToDebt(debtDB);
-      this.debt = debt;
-      console.log(debt);
-    }, 
-    (err) => {
-      console.log("Wrong path");
-      this.router.navigate(['/debtors']);
-    });
-
+    this.debtorsService.findDebtById(this.id).subscribe(
+      (debtDB) => {
+        let debt = this.debtorsService.transformDatabaseDebtToDebt(debtDB);
+        this.debt = debt;
+        console.log(debt);
+      },
+      (err) => {
+        console.log('Wrong path');
+        this.router.navigate(['/debtors']);
+      }
+    );
   }
-
 }

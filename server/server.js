@@ -71,7 +71,7 @@ app.get('/api/debts', function (req, res) {
                     return [3 /*break*/, 3];
                 case 2:
                     error_1 = _a.sent();
-                    res.status(500).send('Something went wrong');
+                    res.status(500).json({ message: 'Something went wrong' });
                     return [3 /*break*/, 3];
                 case 3: return [2 /*return*/];
             }
@@ -84,9 +84,9 @@ app.get('/api/debts/:id', function (req, res) {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    debtId = Number(req.params.id);
+                    debtId = req.params.id;
                     if (!debtId) {
-                        res.status(400).send('Bad Request');
+                        res.status(400).json({ message: 'Bad Request' });
                         return [2 /*return*/];
                     }
                     console.log(debtId);
@@ -98,7 +98,7 @@ app.get('/api/debts/:id', function (req, res) {
                         res.json(debt);
                     }
                     else {
-                        res.status(404).send('Not found');
+                        res.status(404).json({ message: 'Not found' });
                     }
                     return [2 /*return*/];
             }
@@ -111,10 +111,10 @@ app.post('/api/debts', function (req, res) { return __awaiter(void 0, void 0, vo
         switch (_a.label) {
             case 0:
                 if (!req.body.name || !req.body.debt) {
-                    res.status(400).send('Bad params');
+                    res.status(400).json({ message: 'Bad params' });
                     return [2 /*return*/];
                 }
-                id = Date.now();
+                id = generateId();
                 debt = __assign(__assign({}, req.body), { id: id });
                 return [4 /*yield*/, debtsDb.insert(__assign({}, debt))];
             case 1:
@@ -123,7 +123,7 @@ app.post('/api/debts', function (req, res) { return __awaiter(void 0, void 0, vo
             case 2:
                 addedDebt = _a.sent();
                 if (!addedDebt) {
-                    res.status(500).send('Something went wrong');
+                    res.status(500).json({ message: 'Something went wrong' });
                     return [2 /*return*/];
                 }
                 res.status(201).json(addedDebt);
@@ -136,23 +136,23 @@ app.put('/api/debts/:id', function (req, res) { return __awaiter(void 0, void 0,
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                debtId = Number(req.params.id);
+                debtId = req.params.id;
                 if (!debtId) {
-                    res.status(400).send('Bad Request');
+                    res.status(400).json({ message: 'Bad Request' });
                     return [2 /*return*/];
                 }
                 if (!req.body.name || !req.body.debt) {
-                    res.status(400).send('Bad params');
+                    res.status(400).json({ message: 'Bad params' });
                     return [2 /*return*/];
                 }
                 return [4 /*yield*/, debtsDb.update({ id: debtId }, __assign({ id: debtId }, req.body))];
             case 1:
                 updatedDebt = _a.sent();
                 if (updatedDebt) {
-                    res.json('Successfully updated');
+                    res.json({ message: 'Successfully updated' });
                 }
                 else {
-                    res.status(500).send('Something went wrong');
+                    res.status(500).json({ message: 'Something went wrong' });
                 }
                 return [2 /*return*/];
         }
@@ -163,19 +163,19 @@ app["delete"]('/api/debts/:id', function (req, res) { return __awaiter(void 0, v
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                debtId = Number(req.params.id);
+                debtId = req.params.id;
                 if (!debtId) {
-                    res.status(400).send('Bad Request');
+                    res.status(400).json({ message: 'Bad Request' });
                     return [2 /*return*/];
                 }
                 return [4 /*yield*/, debtsDb.remove({ id: debtId }, {})];
             case 1:
                 result = _a.sent();
                 if (result) {
-                    res.status(200).send('Successfully deleted');
+                    res.status(200).json({ message: 'Successfully deleted' });
                 }
                 else {
-                    res.status(500).send('Something went wrong');
+                    res.status(500).json({ message: 'Something went wrong' });
                 }
                 return [2 /*return*/];
         }
@@ -188,7 +188,7 @@ app.get('/api/search', function (req, res) { return __awaiter(void 0, void 0, vo
             case 0:
                 query = req.query.searchData;
                 if (!query) {
-                    res.status(400).send('Bad request');
+                    res.status(400).json({ message: 'Bad request' });
                 }
                 regex = new RegExp("" + query, 'i');
                 return [4 /*yield*/, debtsDb.find({ name: regex })];
@@ -206,3 +206,4 @@ app.get('/*', function (req, res) {
 app.listen(PORT, function () {
     console.log("Server launched on port " + PORT);
 });
+var generateId = function () { return '_' + Math.random().toString(36).substr(2, 9); };

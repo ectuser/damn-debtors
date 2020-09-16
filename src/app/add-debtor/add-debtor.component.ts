@@ -29,7 +29,7 @@ export class AddDebtorComponent implements OnInit {
   ngOnInit(): void {}
 
   onSubmit(debtData) {
-    let debtObj = { ...debtData, id: Date.now() };
+    let debtObj = { ...debtData };
     console.log(debtObj);
     this.debtorService.addDebt(debtObj).subscribe((debt: DatabaseDebt) => {
       this.router.navigate(['/debts']);

@@ -19,13 +19,13 @@ app.get('/api/debts', async function (req, res) {
     const debts = await debtsDb.find({});
     res.json(debts);
   } catch (error) {
-    res.status(500).send('Something went wrong');
+    res.status(500).json({ message: 'Something went wrong' });
   }
 });
 app.get('/api/debts/:id', async function (req, res) {
-  const debtId = Number(req.params.id);
+  const debtId = req.params.id;
   if (!debtId) {
-    res.status(400).send('Bad Request');
+    res.status(400).json({ message: 'Bad Request' });
     return;
   }
   console.log(debtId);
@@ -34,32 +34,32 @@ app.get('/api/debts/:id', async function (req, res) {
   if (debt) {
     res.json(debt);
   } else {
-    res.status(404).send('Not found');
+    res.status(404).json({ message: 'Not found' });
   }
 });
 app.post('/api/debts', async (req, res) => {
   if (!req.body.name || !req.body.debt) {
-    res.status(400).send('Bad params');
+    res.status(400).json({ message: 'Bad params' });
     return;
   }
-  const id = Date.now();
+  const id = generateId();
   const debt: DatabaseDebt = { ...req.body, id };
   const inderted = await debtsDb.insert({ ...debt });
   const addedDebt = await debtsDb.findOne({ _id: inderted._id });
   if (!addedDebt) {
-    res.status(500).send('Something went wrong');
+    res.status(500).json({ message: 'Something went wrong' });
     return;
   }
   res.status(201).json(addedDebt);
 });
 app.put('/api/debts/:id', async (req, res) => {
-  const debtId = Number(req.params.id);
+  const debtId = req.params.id;
   if (!debtId) {
-    res.status(400).send('Bad Request');
+    res.status(400).json({ message: 'Bad Request' });
     return;
   }
   if (!req.body.name || !req.body.debt) {
-    res.status(400).send('Bad params');
+    res.status(400).json({ message: 'Bad params' });
     return;
   }
   const updatedDebt = await debtsDb.update(
@@ -67,28 +67,28 @@ app.put('/api/debts/:id', async (req, res) => {
     { id: debtId, ...req.body }
   );
   if (updatedDebt) {
-    res.json('Successfully updated');
+    res.json({ message: 'Successfully updated' });
   } else {
-    res.status(500).send('Something went wrong');
+    res.status(500).json({ message: 'Something went wrong' });
   }
 });
 app.delete('/api/debts/:id', async (req, res) => {
-  const debtId = Number(req.params.id);
+  const debtId = req.params.id;
   if (!debtId) {
-    res.status(400).send('Bad Request');
+    res.status(400).json({ message: 'Bad Request' });
     return;
   }
   let result = await debtsDb.remove({ id: debtId }, {});
   if (result) {
-    res.status(200).send('Successfully deleted');
+    res.status(200).json({ message: 'Successfully deleted' });
   } else {
-    res.status(500).send('Something went wrong');
+    res.status(500).json({ message: 'Something went wrong' });
   }
 });
 app.get('/api/search', async (req, res) => {
   const query = req.query.searchData;
   if (!query) {
-    res.status(400).send('Bad request');
+    res.status(400).json({ message: 'Bad request' });
   }
   const regex = new RegExp(`${query}`, 'i');
   const debts = await debtsDb.find({ name: regex });
@@ -103,3 +103,5 @@ app.get('/*', function (req, res) {
 app.listen(PORT, () => {
   console.log(`Server launched on port ${PORT}`);
 });
+
+const generateId = () => '_' + Math.random().toString(36).substr(2, 9);
