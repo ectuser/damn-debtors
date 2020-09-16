@@ -8,27 +8,39 @@ import { Debt } from '../models/debt';
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
-  styleUrls: ['./search.component.scss']
+  styleUrls: ['./search.component.scss'],
 })
 export class SearchComponent implements OnInit {
   formGroup = new FormGroup({
-    control: new FormControl()
+    control: new FormControl(),
   });
   debts: Debt[];
   shownDebts: Debt[];
-  constructor(private debtorService: DebtService) { }
+  constructor(private debtorService: DebtService) {}
 
   ngOnInit(): void {
-    this.debtorService.getDebts()
-      .subscribe((dbDebts) => {
-        const debts = dbDebts.map(dbDebt => this.debtorService.transformDatabaseDebtToDebt(dbDebt));
-        this.debts = [...debts];
-        this.shownDebts = [...debts];
-      });
+    this.debtorService.getDebts().subscribe((dbDebts) => {
+      const debts = dbDebts.map((dbDebt) =>
+        this.debtorService.transformDatabaseDebtToDebt(dbDebt)
+      );
+      this.debts = [...debts];
+      this.shownDebts = [...debts];
+    });
 
-    this.formGroup.get('control').valueChanges
-      .subscribe((value) => {
-        this.shownDebts = this.debts.filter(debt => debt.name.toLowerCase().indexOf(value) === 0);
-      })
+    this.formGroup.get('control').valueChanges.subscribe((value) => {
+      if (value.length < 3) {
+        return;
+      }
+      const encodedUserInput = encodeURIComponent(value);
+      this.debtorService
+        .findDebtsByName(encodedUserInput)
+        .subscribe((dbDebts) => {
+          this.shownDebts = [
+            ...dbDebts.map((dbDebt) =>
+              this.debtorService.transformDatabaseDebtToDebt(dbDebt)
+            ),
+          ];
+        });
+    });
   }
 }

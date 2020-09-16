@@ -181,7 +181,7 @@ app["delete"]('/api/debts/:id', function (req, res) { return __awaiter(void 0, v
         }
     });
 }); });
-app.get('/search', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+app.get('/api/search', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var query, regex, debts;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -190,7 +190,7 @@ app.get('/search', function (req, res) { return __awaiter(void 0, void 0, void 0
                 if (!query) {
                     res.status(400).send('Bad request');
                 }
-                regex = new RegExp("" + query);
+                regex = new RegExp("" + query, 'i');
                 return [4 /*yield*/, debtsDb.find({ name: regex })];
             case 1:
                 debts = _a.sent();

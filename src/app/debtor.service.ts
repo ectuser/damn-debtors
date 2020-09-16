@@ -51,6 +51,11 @@ export class DebtService {
     return this.http.get<DatabaseDebt>(url);
   }
 
+  findDebtsByName(searchString: string): Observable<DatabaseDebt[]> {
+    const url = `api/search?searchData=${searchString}`;
+    return this.http.get<DatabaseDebt[]>(url);
+  }
+
   public transformDebtToDatabaseDebt(debt: Debt): DatabaseDebt {
     let databaseDebtor: DatabaseDebt = {
       id: debt.id,
