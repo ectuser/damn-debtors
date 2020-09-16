@@ -10,21 +10,21 @@ export class InMemoryDataService implements InMemoryDbService {
   createDb() {
     const debts1: DatabaseDebt[] = [
       {
-        id: 1,
+        id: '1',
         name: 'Alex',
         debt: 1000,
         loanDate: '2020-11-04T17:00:00.000Z',
         paymentDate: '2020-11-10T17:00:00.000Z',
       },
       {
-        id: 2,
+        id: '2',
         name: 'Ivan',
         debt: 1500,
         loanDate: '2020-11-04T17:00:00.000Z',
         paymentDate: '2020-11-10T17:00:00.000Z',
       },
       {
-        id: 3,
+        id: '3',
         name: 'John',
         debt: 2000,
         paymentDate: '2020-11-10T17:00:00.000Z',
@@ -33,9 +33,9 @@ export class InMemoryDataService implements InMemoryDbService {
     return { debts1 };
   }
 
-  genId(debts: Debt[]): number {
-    return debts.length > 0
-      ? Math.max(...debts.map((debt) => debt.id)) + 1
-      : 11;
-  }
+  // genId(debts: Debt[]): number {
+  //   return debts.length > 0
+  //     ? Math.max(...debts.map((debt) => debt.id)) + 1
+  //     : 11;
+  // }
 }

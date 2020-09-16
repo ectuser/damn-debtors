@@ -46,7 +46,7 @@ export class DebtService {
     return this.http.delete<DatabaseDebt>(url, this.httpOptions);
   }
 
-  findDebtById(id: number): Observable<DatabaseDebt> {
+  findDebtById(id: string): Observable<DatabaseDebt> {
     const url = `${this.debtsUrl}/${id}`;
     return this.http.get<DatabaseDebt>(url);
   }

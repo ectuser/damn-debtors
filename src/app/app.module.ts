@@ -28,6 +28,8 @@ import { SearchComponent } from './search/search.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { SignInComponent } from './sign-in/sign-in.component';
+import { SignUpComponent } from './sign-up/sign-up.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +41,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     DebtComponent,
     SearchComponent,
     NotFoundComponent,
+    SignInComponent,
+    SignUpComponent,
   ],
   imports: [
     BrowserModule,
