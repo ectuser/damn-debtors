@@ -73,7 +73,7 @@ app.get('/api/debts/:id', async function (req, res) {
     res.status(404).send('Not found');
   }
 });
-app.post('/api/debt', async (req, res) => {
+app.post('/api/debts', async (req, res) => {
   if (!req.body.name || !req.body.debt) {
     res.status(400).send('Bad params');
     return;
@@ -88,7 +88,7 @@ app.post('/api/debt', async (req, res) => {
   }
   res.status(201).json(addedDebt);
 });
-app.put('/api/debt/:id', async (req, res) => {
+app.put('/api/debts/:id', async (req, res) => {
   const debtId = Number(req.params.id);
   if (!debtId) {
     res.status(400).send('Bad Request');
@@ -108,7 +108,7 @@ app.put('/api/debt/:id', async (req, res) => {
     res.status(500).send('Something went wrong');
   }
 });
-app.delete('/api/debt/:id', async (req, res) => {
+app.delete('/api/debts/:id', async (req, res) => {
   const debtId = Number(req.params.id);
   if (!debtId) {
     res.status(400).send('Bad Request');
