@@ -140,7 +140,7 @@ app.get('/api/debts/:id', function (req, res) {
         });
     });
 });
-app.post('/api/debt', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+app.post('/api/debts', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, debt, inderted, addedDebt;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -166,7 +166,7 @@ app.post('/api/debt', function (req, res) { return __awaiter(void 0, void 0, voi
         }
     });
 }); });
-app.put('/api/debt/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+app.put('/api/debts/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var debtId, updatedDebt;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -193,7 +193,7 @@ app.put('/api/debt/:id', function (req, res) { return __awaiter(void 0, void 0, 
         }
     });
 }); });
-app["delete"]('/api/debt/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+app["delete"]('/api/debts/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var debtId, result;
     return __generator(this, function (_a) {
         switch (_a.label) {

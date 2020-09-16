@@ -23,8 +23,8 @@ export class DebtService {
     return data;
   }
 
-  addDebt(debtor: Debt): Observable<DatabaseDebt> {
-    let databaseDebtor: DatabaseDebt = this.transformDebtToDatabaseDebt(debtor);
+  addDebt(debt: Debt): Observable<DatabaseDebt> {
+    let databaseDebtor: DatabaseDebt = this.transformDebtToDatabaseDebt(debt);
     return this.http.post<DatabaseDebt>(
       this.debtsUrl,
       databaseDebtor,
@@ -32,10 +32,11 @@ export class DebtService {
     );
   }
 
-  updateDebt(debtor: Debt): Observable<any> {
-    let databaseDebt = this.transformDebtToDatabaseDebt(debtor);
+  updateDebt(debt: Debt): Observable<any> {
+    let databaseDebt = this.transformDebtToDatabaseDebt(debt);
     console.log(databaseDebt);
-    return this.http.put(this.debtsUrl, databaseDebt, this.httpOptions);
+    const url = `${this.debtsUrl}/${databaseDebt.id}`;
+    return this.http.put(url, databaseDebt, this.httpOptions);
   }
 
   deleteDebt(debt: Debt): Observable<DatabaseDebt> {
