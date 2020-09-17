@@ -1,8 +1,13 @@
 import { DatabaseDebt } from '../src/app/models/databaseDebt';
-import express = require('express');
-import path = require('path');
-import bodyParser = require('body-parser');
-import Datastore = require('nedb-promises');
+const express = require('express');
+const path = require('path');
+const crypto = require('crypto');
+const bodyParser = require('body-parser');
+const Datastore = require('nedb-promises');
+
+const passport = require('passport');
+const { Strategy, ExtractJwt } = require('passport-jwt');
+const jwt = require('jsonwebtoken');
 
 const debtsDb = Datastore.create('server/db/debts.db');
 const usersDb = Datastore.create('server/db/users.db');
@@ -14,15 +19,38 @@ const PORT = process.env.PORT || 8080;
 app.use(express.static('./dist/damn-debtors'));
 app.use(bodyParser.json());
 
+const opts = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: 'idkwhatisitsorry',
+};
+passport.use(
+  new Strategy(opts, async (payload, done) => {
+    const user = await usersDb
+      .findOne({ id: payload.id })
+      .catch((err) => console.error(err));
+    if (!user) {
+      return done(null, false);
+    }
+    return done(null, {
+      id: user.id,
+      email: user.email,
+    });
+  })
+);
+
 // API
-app.get('/api/debts', async function (req, res) {
-  try {
-    const debts = await debtsDb.find({});
-    res.json(debts);
-  } catch (error) {
-    res.status(500).json({ message: 'Something went wrong' });
+app.get(
+  '/api/debts',
+  passport.authenticate('jwt', { session: false }),
+  async function (req, res) {
+    try {
+      const debts = await debtsDb.find({});
+      res.json(debts);
+    } catch (error) {
+      res.status(500).json({ message: 'Something went wrong' });
+    }
   }
-});
+);
 app.get('/api/debts/:id', async function (req, res) {
   const debtId = req.params.id;
   if (!debtId) {
@@ -95,13 +123,78 @@ app.get('/api/search', async (req, res) => {
   const debts = await debtsDb.find({ name: regex });
   res.send(debts);
 });
-app.post('/api/auth/sign-in', async (req, res) => {
+app.post('/api/users/create', async (req, res) => {
   if (!req.body.email || !req.body.password) {
     res.status(400).json({ message: 'Bad request' });
     return;
   }
   const { email, password } = req.body;
-  // const user = usersDb.findOne({email});
+  const salt = generateSalt();
+  const encryptedPassword = encryptPassword(password, salt);
+
+  const existedUser = await usersDb.findOne({ email });
+  if (existedUser) {
+    res.status(409).json({ message: 'User already exists' });
+    return;
+  }
+  const inderted = await usersDb.insert({
+    email,
+    password: encryptedPassword,
+    id: generateId(),
+    salt,
+  });
+  const addedUser = await usersDb.findOne({ _id: inderted._id });
+  if (!addedUser) {
+    res.status(500).json({ message: 'Something went wrong' });
+    return;
+  }
+  res.status(201).json(addedUser);
+});
+app.post('/api/users/validate', async (req, res) => {
+  if (!req.body.email || !req.body.password) {
+    res.status(400).json({ message: 'Bad request' });
+    return;
+  }
+  const { email, password } = req.body;
+
+  const user = await usersDb.findOne({ email });
+
+  const result = checkThePassword(password, user.password, user.salt);
+  if (result) {
+    const payload = {
+      id: user.id,
+      email: user.email,
+    };
+    jwt.sign(
+      payload,
+      'idkwhatisitsorry',
+      { expiresIn: 36000 },
+      (err, token) => {
+        if (err)
+          res.status(500).json({ error: 'Error signing token', raw: err });
+        res.json({
+          success: true,
+          token: `Bearer ${token}`,
+        });
+        res.json(user);
+      }
+    );
+  } else {
+    res.status(401).json({ message: '123' });
+  }
+});
+app.get('/api/users/:id', async (req, res) => {
+  const debtId = req.params.id;
+  if (!debtId) {
+    res.status(400).json({ message: 'Bad Request' });
+    return;
+  }
+  const user = await usersDb.findOne({ id: debtId });
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404).json({ message: "Can't find the user" });
+  }
 });
 
 app.get('/*', function (req, res) {
@@ -114,3 +207,15 @@ app.listen(PORT, () => {
 });
 
 const generateId = () => '_' + Math.random().toString(36).substr(2, 9);
+
+const encryptPassword = (password: string, salt: string): String =>
+  crypto.pbkdf2Sync(password, salt, 10000, 512, 'sha512').toString('hex');
+const checkThePassword = (
+  insertedPassword: string,
+  databasePassword: string,
+  databaseSalt: string
+): Boolean => {
+  const hash = encryptPassword(insertedPassword, databaseSalt);
+  return hash === databasePassword;
+};
+const generateSalt = (): string => crypto.randomBytes(16).toString('hex');
