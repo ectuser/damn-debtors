@@ -5,6 +5,7 @@ import bodyParser = require('body-parser');
 import Datastore = require('nedb-promises');
 
 const debtsDb = Datastore.create('server/db/debts.db');
+const usersDb = Datastore.create('server/db/users.db');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -93,6 +94,14 @@ app.get('/api/search', async (req, res) => {
   const regex = new RegExp(`${query}`, 'i');
   const debts = await debtsDb.find({ name: regex });
   res.send(debts);
+});
+app.post('/api/auth/sign-in', async (req, res) => {
+  if (!req.body.email || !req.body.password) {
+    res.status(400).json({ message: 'Bad request' });
+    return;
+  }
+  const { email, password } = req.body;
+  // const user = usersDb.findOne({email});
 });
 
 app.get('/*', function (req, res) {
