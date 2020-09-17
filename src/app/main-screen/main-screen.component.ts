@@ -61,12 +61,15 @@ export class MainScreenComponent implements OnInit {
   }
 
   getDebts() {
-    this.debtService.getDebts().subscribe((debts) => {
-      console.log(debts);
-      this.dataSource = debts.map((debtor: DatabaseDebt) => {
-        let obj: Debt = this.debtService.transformDatabaseDebtToDebt(debtor);
-        return obj;
-      });
-    });
+    this.debtService.getDebts().subscribe(
+      (debts) => {
+        console.log(debts);
+        this.dataSource = debts.map((debtor: DatabaseDebt) => {
+          let obj: Debt = this.debtService.transformDatabaseDebtToDebt(debtor);
+          return obj;
+        });
+      },
+      (err) => console.log(err)
+    );
   }
 }
