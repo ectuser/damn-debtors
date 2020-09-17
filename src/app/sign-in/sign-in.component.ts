@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
+import { throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { AuthService } from '../auth/auth.service';
 import { User } from '../models/user';
 
@@ -10,7 +13,7 @@ import { User } from '../models/user';
 })
 export class SignInComponent implements OnInit {
   signInForm: FormGroup;
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.signInForm = new FormGroup({
@@ -20,8 +23,20 @@ export class SignInComponent implements OnInit {
   }
 
   onSubmit(signInData): void {
-    this.authService.signIn(signInData).subscribe((value: User) => {
-      console.log(value);
-    });
+    this.authService
+      .signIn(signInData)
+      .pipe(
+        catchError((err) => {
+          console.log('Handling error locally and rethrowing it...', err);
+          return throwError(err);
+        })
+      )
+      .subscribe(
+        (value: User) => {
+          console.log(value);
+          this.router.navigate(['/debts']);
+        },
+        (err) => console.log(err)
+      );
   }
 }
