@@ -3,8 +3,8 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { AuthService } from '../auth/auth.service';
-import { User } from '../models/user';
+import { AuthService } from '../auth.service';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-sign-in',

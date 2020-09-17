@@ -5,8 +5,8 @@ import { MainScreenComponent } from './main-screen/main-screen.component';
 import { DebtComponent } from './debt/debt.component';
 import { SearchComponent } from './search/search.component';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { SignInComponent } from './sign-in/sign-in.component';
-import { SignUpComponent } from './sign-up/sign-up.component';
+import { SignInComponent } from './auth/sign-in/sign-in.component';
+import { SignUpComponent } from './auth/sign-up/sign-up.component';
 import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [
