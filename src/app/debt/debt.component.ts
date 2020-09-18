@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DebtService } from '../debtor.service';
+import { DebtService } from '../debt.service';
 import { Debt } from '../models/debt';
 
 @Component({

@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { DebtService } from '../debtor.service';
+import { DebtService } from '../debt.service';
 import { DatabaseDebt } from '../models/databaseDebt';
 import { Debt } from '../models/debt';
 import {
@@ -61,12 +61,15 @@ export class MainScreenComponent implements OnInit {
   }
 
   getDebts() {
-    this.debtService.getDebts().subscribe((debts) => {
-      console.log(debts);
-      this.dataSource = debts.map((debtor: DatabaseDebt) => {
-        let obj: Debt = this.debtService.transformDatabaseDebtToDebt(debtor);
-        return obj;
-      });
-    });
+    this.debtService.getDebts().subscribe(
+      (debts) => {
+        console.log(debts);
+        this.dataSource = debts.map((debtor: DatabaseDebt) => {
+          let obj: Debt = this.debtService.transformDatabaseDebtToDebt(debtor);
+          return obj;
+        });
+      },
+      (err) => console.log(err)
+    );
   }
 }

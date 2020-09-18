@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { Debt } from './models/debt';
 import { DatabaseDebt } from './models/databaseDebt';
 import { catchError } from 'rxjs/operators';
@@ -12,7 +12,9 @@ import { of } from 'rxjs/internal/observable/of';
 export class DebtService {
   private debtsUrl = 'api/debts';
   httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+    }),
   };
 
   constructor(private http: HttpClient) {}
@@ -20,7 +22,11 @@ export class DebtService {
   getDebts(): Observable<DatabaseDebt[]> {
     const data = this.http.get<DatabaseDebt[]>(this.debtsUrl, this.httpOptions);
     console.log(data);
-    return data;
+    return data.pipe(
+      catchError(() => {
+        return throwError("Can't find debts");
+      })
+    );
   }
 
   addDebt(debt: Debt): Observable<DatabaseDebt> {
@@ -48,7 +54,9 @@ export class DebtService {
 
   findDebtById(id: string): Observable<DatabaseDebt> {
     const url = `${this.debtsUrl}/${id}`;
-    return this.http.get<DatabaseDebt>(url);
+    return this.http
+      .get<DatabaseDebt>(url)
+      .pipe(catchError(() => throwError("Can't find debt")));
   }
 
   findDebtsByName(searchString: string): Observable<DatabaseDebt[]> {

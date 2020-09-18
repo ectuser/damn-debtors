@@ -47,17 +47,45 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-var express = require("express");
-var bodyParser = require("body-parser");
-var Datastore = require("nedb-promises");
+var express = require('express');
+var path = require('path');
+var crypto = require('crypto');
+var bodyParser = require('body-parser');
+var Datastore = require('nedb-promises');
+var passport = require('passport');
+var _a = require('passport-jwt'), Strategy = _a.Strategy, ExtractJwt = _a.ExtractJwt;
+var jwt = require('jsonwebtoken');
 var debtsDb = Datastore.create('server/db/debts.db');
+var usersDb = Datastore.create('server/db/users.db');
 var app = express();
 var PORT = process.env.PORT || 8080;
 // Serve only the static files form the dist directory
 app.use(express.static('./dist/damn-debtors'));
 app.use(bodyParser.json());
+var opts = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: 'idkwhatisitsorry'
+};
+passport.use(new Strategy(opts, function (payload, done) { return __awaiter(void 0, void 0, void 0, function () {
+    var user;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, usersDb
+                    .findOne({ id: payload.id })["catch"](function (err) { return console.error(err); })];
+            case 1:
+                user = _a.sent();
+                if (!user) {
+                    return [2 /*return*/, done(null, false)];
+                }
+                return [2 /*return*/, done(null, {
+                        id: user.id,
+                        email: user.email
+                    })];
+        }
+    });
+}); }));
 // API
-app.get('/api/debts', function (req, res) {
+app.get('/api/debts', passport.authenticate('jwt', { session: false }), function (req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var debts, error_1;
         return __generator(this, function (_a) {
@@ -78,7 +106,7 @@ app.get('/api/debts', function (req, res) {
         });
     });
 });
-app.get('/api/debts/:id', function (req, res) {
+app.get('/api/debts/:id', passport.authenticate('jwt', { session: false }), function (req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var debtId, debt;
         return __generator(this, function (_a) {
@@ -105,7 +133,7 @@ app.get('/api/debts/:id', function (req, res) {
         });
     });
 });
-app.post('/api/debts', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+app.post('/api/debts', passport.authenticate('jwt', { session: false }), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, debt, inderted, addedDebt;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -131,7 +159,7 @@ app.post('/api/debts', function (req, res) { return __awaiter(void 0, void 0, vo
         }
     });
 }); });
-app.put('/api/debts/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+app.put('/api/debts/:id', passport.authenticate('jwt', { session: false }), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var debtId, updatedDebt;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -158,7 +186,7 @@ app.put('/api/debts/:id', function (req, res) { return __awaiter(void 0, void 0,
         }
     });
 }); });
-app["delete"]('/api/debts/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+app["delete"]('/api/debts/:id', passport.authenticate('jwt', { session: false }), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var debtId, result;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -181,7 +209,7 @@ app["delete"]('/api/debts/:id', function (req, res) { return __awaiter(void 0, v
         }
     });
 }); });
-app.get('/api/search', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+app.get('/api/search', passport.authenticate('jwt', { session: false }), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var query, regex, debts;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -199,6 +227,107 @@ app.get('/api/search', function (req, res) { return __awaiter(void 0, void 0, vo
         }
     });
 }); });
+app.post('/api/register', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, email, password, salt, encryptedPassword, existedUser, inderted, addedUser;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                if (!req.body.email || !req.body.password) {
+                    res.status(400).json({ message: 'Bad request' });
+                    return [2 /*return*/];
+                }
+                _a = req.body, email = _a.email, password = _a.password;
+                salt = generateSalt();
+                encryptedPassword = encryptPassword(password, salt);
+                return [4 /*yield*/, usersDb.findOne({ email: email })];
+            case 1:
+                existedUser = _b.sent();
+                if (existedUser) {
+                    res.status(409).json({ message: 'User already exists' });
+                    return [2 /*return*/];
+                }
+                return [4 /*yield*/, usersDb.insert({
+                        email: email,
+                        password: encryptedPassword,
+                        id: generateId(),
+                        salt: salt
+                    })];
+            case 2:
+                inderted = _b.sent();
+                return [4 /*yield*/, usersDb.findOne({ _id: inderted._id })];
+            case 3:
+                addedUser = _b.sent();
+                if (!addedUser) {
+                    res.status(500).json({ message: 'Something went wrong' });
+                    return [2 /*return*/];
+                }
+                res.status(201).json({ success: true, message: 'User successfully created' });
+                return [2 /*return*/];
+        }
+    });
+}); });
+app.post('/api/login', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, email, password, user, result, payload;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                if (!req.body.email || !req.body.password) {
+                    res.status(400).json({ message: 'Bad request' });
+                    return [2 /*return*/];
+                }
+                _a = req.body, email = _a.email, password = _a.password;
+                return [4 /*yield*/, usersDb.findOne({ email: email })];
+            case 1:
+                user = _b.sent();
+                result = checkThePassword(password, user.password, user.salt);
+                if (result) {
+                    payload = {
+                        id: user.id,
+                        email: user.email
+                    };
+                    jwt.sign(payload, 'idkwhatisitsorry', { expiresIn: 36000 }, function (err, token) {
+                        if (err)
+                            res.status(500).json({ error: 'Error signing token', raw: err });
+                        res.json({
+                            success: true,
+                            token: "Bearer " + token
+                        });
+                        res.json(user);
+                    });
+                }
+                else {
+                    res.status(401).json({ message: '123' });
+                }
+                return [2 /*return*/];
+        }
+    });
+}); });
+app.get('/api/users/:id', passport.authenticate('jwt', { session: false }), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var debtId, user;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                debtId = req.params.id;
+                if (!debtId) {
+                    res.status(400).json({ message: 'Bad Request' });
+                    return [2 /*return*/];
+                }
+                return [4 /*yield*/, usersDb.findOne({ id: debtId })];
+            case 1:
+                user = _a.sent();
+                if (user) {
+                    res.json(user);
+                }
+                else {
+                    res.status(404).json({ message: "Can't find the user" });
+                }
+                return [2 /*return*/];
+        }
+    });
+}); });
+app.get('/api/check-the-token', passport.authenticate('jwt', { session: false }), function (req, res) {
+    res.json({ message: 'Success' });
+});
 app.get('/*', function (req, res) {
     res.sendFile('index.html', { root: 'dist/damn-debtors/' });
 });
@@ -207,3 +336,11 @@ app.listen(PORT, function () {
     console.log("Server launched on port " + PORT);
 });
 var generateId = function () { return '_' + Math.random().toString(36).substr(2, 9); };
+var encryptPassword = function (password, salt) {
+    return crypto.pbkdf2Sync(password, salt, 10000, 512, 'sha512').toString('hex');
+};
+var checkThePassword = function (insertedPassword, databasePassword, databaseSalt) {
+    var hash = encryptPassword(insertedPassword, databaseSalt);
+    return hash === databasePassword;
+};
+var generateSalt = function () { return crypto.randomBytes(16).toString('hex'); };
