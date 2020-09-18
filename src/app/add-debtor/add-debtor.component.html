@@ -1,6 +1,6 @@
 <div class="content">
   <h1>Add debtor</h1>
-  <form [formGroup]="addDebtorForm" (ngSubmit)="onSubmit(addDebtorForm.value)">
+  <form [formGroup]="addDebtForm" (ngSubmit)="onSubmit(addDebtForm.value)">
     <div>
       <mat-form-field class="add-debtor-field">
         <mat-label>Name</mat-label>
@@ -45,6 +45,13 @@
         <mat-datepicker #paymentDatePicker></mat-datepicker>
       </mat-form-field>
     </div>
-    <button mat-raised-button color="primary" type="submit">Add</button>
+    <button
+      mat-raised-button
+      color="primary"
+      type="submit"
+      [disabled]="!addDebtForm.valid"
+    >
+      Add
+    </button>
   </form>
 </div>
