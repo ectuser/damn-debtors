@@ -25,9 +25,13 @@ export class SignInComponent implements OnInit {
   onSubmit(signInData): void {
     console.log(signInData);
     this.authService.signIn(signInData).subscribe(
-      (value: User) => {
+      (value) => {
         console.log(value);
-        this.router.navigate(['/debts']);
+        if (value.token && value.success) {
+          localStorage.setItem('bearerToken', value.token);
+          this.authService.setBearerToken();
+          this.router.navigate(['/debts']);
+        }
       },
       (err) => console.log(err)
     );
