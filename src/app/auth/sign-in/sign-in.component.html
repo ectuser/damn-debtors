@@ -1,0 +1,30 @@
+<div class="parent">
+  <form
+    [formGroup]="signInForm"
+    (ngSubmit)="onSubmit(signInForm.value)"
+    class="child"
+  >
+    <div>
+      <mat-form-field class="add-debtor-field" style="width: 100%">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" type="email" />
+      </mat-form-field>
+    </div>
+    <div>
+      <mat-form-field class="add-debtor-field" style="width: 100%">
+        <mat-label>Password</mat-label>
+        <input matInput formControlName="password" type="password" />
+      </mat-form-field>
+    </div>
+    <div style="text-align: center">
+      <button mat-raised-button color="primary" type="submit">Sign In</button>
+    </div>
+    <div style="margin-top: 10px">
+      <!-- <a mat-button href="https://www.google.com/" target="_blank">Link</a> -->
+      <a style="float: left" mat-button routerLink="/restore-password"
+        >Forgot password</a
+      >
+      <a style="float: right" mat-button routerLink="/sign-up">Sign Up</a>
+    </div>
+  </form>
+</div>

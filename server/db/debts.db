@@ -1,3 +1,3 @@
-{"name":"123","debt":123,"paymentDate":null,"loanDate":null,"id":"_ln1vzs14a","_id":"Ohj0yntInlFRt9pr"}
-{"id":"_ln1vzs14a","name":"123","debt":123,"paymentDate":"Tue Sep 15 2020","loanDate":"Mon Sep 14 2020","_id":"Ohj0yntInlFRt9pr"}
-{"$$deleted":true,"_id":"Ohj0yntInlFRt9pr"}
+{"name":"123","debt":456,"paymentDate":"Wed Sep 30 2020","loanDate":"Tue Sep 01 2020","id":"_t52m81efv","_id":"ENB5mXXGSRY11tPb"}
+{"name":"example","debt":"123","id":"_ktiw4p5t5","_id":"eN4JKso9CyQSqYkM"}
+{"name":"112","debt":3,"paymentDate":null,"loanDate":"Tue Sep 08 2020","id":"_fr9zwef75","_id":"uEYknRz2LagvwI3d"}
