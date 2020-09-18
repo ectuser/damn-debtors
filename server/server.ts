@@ -220,6 +220,10 @@ app.get(
     }
   }
 );
+app.get(
+  '/api/check-the-token',
+  passport.authenticate('jwt', { session: false })
+);
 
 app.get('/*', function (req, res) {
   res.sendFile('index.html', { root: 'dist/damn-debtors/' });

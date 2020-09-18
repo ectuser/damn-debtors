@@ -93,12 +93,4 @@ export class DebtService {
       : null;
     return debt;
   }
-
-  setBearerToken() {
-    const token = localStorage.getItem('bearerToken');
-    if (token) {
-      this.httpOptions.headers.set('Authorization', token);
-    } else {
-    }
-  }
 }

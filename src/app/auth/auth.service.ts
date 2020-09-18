@@ -51,4 +51,18 @@ export class AuthService {
     } else {
     }
   }
+
+  checkIsTokenValid() {
+    const token = localStorage.getItem('bearerToken');
+    this.setBearerToken();
+    return this.http.get('/api/check-the-token', this.httpOptions).pipe(
+      tap(() => {
+        this.isLoggedIn = true;
+      }),
+      catchError((err) => {
+        this.isLoggedIn = false;
+        return throwError(err);
+      })
+    );
+  }
 }
