@@ -168,7 +168,7 @@ app.post('/api/register', async (req, res) => {
     res.status(500).json({ message: 'Something went wrong' });
     return;
   }
-  res.status(201).json(addedUser);
+  res.status(201).json({ success: true, message: 'User successfully created' });
 });
 app.post('/api/login', async (req, res) => {
   if (!req.body.email || !req.body.password) {

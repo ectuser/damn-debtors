@@ -261,7 +261,7 @@ app.post('/api/register', function (req, res) { return __awaiter(void 0, void 0,
                     res.status(500).json({ message: 'Something went wrong' });
                     return [2 /*return*/];
                 }
-                res.status(201).json(addedUser);
+                res.status(201).json({ success: true, message: 'User successfully created' });
                 return [2 /*return*/];
         }
     });
