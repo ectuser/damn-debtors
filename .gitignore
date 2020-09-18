@@ -2,6 +2,7 @@
 
 # Don't include the db
 /server/db
+*.db
 
 # compiled output
 /dist
