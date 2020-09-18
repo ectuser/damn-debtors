@@ -7,6 +7,7 @@ import {
 } from '@angular/router';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -27,19 +28,18 @@ export class AuthGuard implements CanActivate {
     return this.checkLogin(url);
   }
 
-  checkLogin(url: string): true | UrlTree {
+  checkLogin(url: string): Observable<UrlTree | boolean> | boolean {
     if (this.authService.isLoggedIn) {
       return true;
     }
-    this.authService.checkIsTokenValid().subscribe(
-      (value) => {},
-      (err) => {}
+    return this.authService.checkIsTokenValid().pipe(
+      map((isAuthenticated) => {
+        if (isAuthenticated) {
+          return isAuthenticated;
+        }
+        this.authService.redirectUrl = url;
+        return this.router.parseUrl('/sign-in');
+      })
     );
-
-    // Store the attempted URL for redirecting
-    this.authService.redirectUrl = url;
-
-    // Redirect to the login page
-    return this.router.parseUrl('/sign-in');
   }
 }

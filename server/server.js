@@ -325,6 +325,9 @@ app.get('/api/users/:id', passport.authenticate('jwt', { session: false }), func
         }
     });
 }); });
+app.get('/api/check-the-token', passport.authenticate('jwt', { session: false }), function (req, res) {
+    res.json({ message: 'Success' });
+});
 app.get('/*', function (req, res) {
     res.sendFile('index.html', { root: 'dist/damn-debtors/' });
 });

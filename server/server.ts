@@ -222,7 +222,10 @@ app.get(
 );
 app.get(
   '/api/check-the-token',
-  passport.authenticate('jwt', { session: false })
+  passport.authenticate('jwt', { session: false }),
+  (req, res) => {
+    res.json({ message: 'Success' });
+  }
 );
 
 app.get('/*', function (req, res) {
