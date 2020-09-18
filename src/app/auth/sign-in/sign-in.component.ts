@@ -28,8 +28,6 @@ export class SignInComponent implements OnInit {
       (value) => {
         console.log(value);
         if (value.token && value.success) {
-          localStorage.setItem('bearerToken', value.token);
-          this.authService.setBearerToken();
           this.router.navigate(['/debts']);
         }
       },
