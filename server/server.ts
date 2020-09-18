@@ -51,79 +51,99 @@ app.get(
     }
   }
 );
-app.get('/api/debts/:id', async function (req, res) {
-  const debtId = req.params.id;
-  if (!debtId) {
-    res.status(400).json({ message: 'Bad Request' });
-    return;
+app.get(
+  '/api/debts/:id',
+  passport.authenticate('jwt', { session: false }),
+  async function (req, res) {
+    const debtId = req.params.id;
+    if (!debtId) {
+      res.status(400).json({ message: 'Bad Request' });
+      return;
+    }
+    console.log(debtId);
+    const debt = await debtsDb.findOne({ id: debtId });
+    console.log(debt);
+    if (debt) {
+      res.json(debt);
+    } else {
+      res.status(404).json({ message: 'Not found' });
+    }
   }
-  console.log(debtId);
-  const debt = await debtsDb.findOne({ id: debtId });
-  console.log(debt);
-  if (debt) {
-    res.json(debt);
-  } else {
-    res.status(404).json({ message: 'Not found' });
+);
+app.post(
+  '/api/debts',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res) => {
+    if (!req.body.name || !req.body.debt) {
+      res.status(400).json({ message: 'Bad params' });
+      return;
+    }
+    const id = generateId();
+    const debt: DatabaseDebt = { ...req.body, id };
+    const inderted = await debtsDb.insert({ ...debt });
+    const addedDebt = await debtsDb.findOne({ _id: inderted._id });
+    if (!addedDebt) {
+      res.status(500).json({ message: 'Something went wrong' });
+      return;
+    }
+    res.status(201).json(addedDebt);
   }
-});
-app.post('/api/debts', async (req, res) => {
-  if (!req.body.name || !req.body.debt) {
-    res.status(400).json({ message: 'Bad params' });
-    return;
+);
+app.put(
+  '/api/debts/:id',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res) => {
+    const debtId = req.params.id;
+    if (!debtId) {
+      res.status(400).json({ message: 'Bad Request' });
+      return;
+    }
+    if (!req.body.name || !req.body.debt) {
+      res.status(400).json({ message: 'Bad params' });
+      return;
+    }
+    const updatedDebt = await debtsDb.update(
+      { id: debtId },
+      { id: debtId, ...req.body }
+    );
+    if (updatedDebt) {
+      res.json({ message: 'Successfully updated' });
+    } else {
+      res.status(500).json({ message: 'Something went wrong' });
+    }
   }
-  const id = generateId();
-  const debt: DatabaseDebt = { ...req.body, id };
-  const inderted = await debtsDb.insert({ ...debt });
-  const addedDebt = await debtsDb.findOne({ _id: inderted._id });
-  if (!addedDebt) {
-    res.status(500).json({ message: 'Something went wrong' });
-    return;
+);
+app.delete(
+  '/api/debts/:id',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res) => {
+    const debtId = req.params.id;
+    if (!debtId) {
+      res.status(400).json({ message: 'Bad Request' });
+      return;
+    }
+    let result = await debtsDb.remove({ id: debtId }, {});
+    if (result) {
+      res.status(200).json({ message: 'Successfully deleted' });
+    } else {
+      res.status(500).json({ message: 'Something went wrong' });
+    }
   }
-  res.status(201).json(addedDebt);
-});
-app.put('/api/debts/:id', async (req, res) => {
-  const debtId = req.params.id;
-  if (!debtId) {
-    res.status(400).json({ message: 'Bad Request' });
-    return;
+);
+app.get(
+  '/api/search',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res) => {
+    const query = req.query.searchData;
+    if (!query) {
+      res.status(400).json({ message: 'Bad request' });
+    }
+    const regex = new RegExp(`${query}`, 'i');
+    const debts = await debtsDb.find({ name: regex });
+    res.send(debts);
   }
-  if (!req.body.name || !req.body.debt) {
-    res.status(400).json({ message: 'Bad params' });
-    return;
-  }
-  const updatedDebt = await debtsDb.update(
-    { id: debtId },
-    { id: debtId, ...req.body }
-  );
-  if (updatedDebt) {
-    res.json({ message: 'Successfully updated' });
-  } else {
-    res.status(500).json({ message: 'Something went wrong' });
-  }
-});
-app.delete('/api/debts/:id', async (req, res) => {
-  const debtId = req.params.id;
-  if (!debtId) {
-    res.status(400).json({ message: 'Bad Request' });
-    return;
-  }
-  let result = await debtsDb.remove({ id: debtId }, {});
-  if (result) {
-    res.status(200).json({ message: 'Successfully deleted' });
-  } else {
-    res.status(500).json({ message: 'Something went wrong' });
-  }
-});
-app.get('/api/search', async (req, res) => {
-  const query = req.query.searchData;
-  if (!query) {
-    res.status(400).json({ message: 'Bad request' });
-  }
-  const regex = new RegExp(`${query}`, 'i');
-  const debts = await debtsDb.find({ name: regex });
-  res.send(debts);
-});
-app.post('/api/users/create', async (req, res) => {
+);
+app.post('/api/register', async (req, res) => {
   if (!req.body.email || !req.body.password) {
     res.status(400).json({ message: 'Bad request' });
     return;
@@ -150,7 +170,7 @@ app.post('/api/users/create', async (req, res) => {
   }
   res.status(201).json(addedUser);
 });
-app.post('/api/users/validate', async (req, res) => {
+app.post('/api/login', async (req, res) => {
   if (!req.body.email || !req.body.password) {
     res.status(400).json({ message: 'Bad request' });
     return;
@@ -183,19 +203,23 @@ app.post('/api/users/validate', async (req, res) => {
     res.status(401).json({ message: '123' });
   }
 });
-app.get('/api/users/:id', async (req, res) => {
-  const debtId = req.params.id;
-  if (!debtId) {
-    res.status(400).json({ message: 'Bad Request' });
-    return;
+app.get(
+  '/api/users/:id',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res) => {
+    const debtId = req.params.id;
+    if (!debtId) {
+      res.status(400).json({ message: 'Bad Request' });
+      return;
+    }
+    const user = await usersDb.findOne({ id: debtId });
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).json({ message: "Can't find the user" });
+    }
   }
-  const user = await usersDb.findOne({ id: debtId });
-  if (user) {
-    res.json(user);
-  } else {
-    res.status(404).json({ message: "Can't find the user" });
-  }
-});
+);
 
 app.get('/*', function (req, res) {
   res.sendFile('index.html', { root: 'dist/damn-debtors/' });

@@ -23,20 +23,13 @@ export class SignInComponent implements OnInit {
   }
 
   onSubmit(signInData): void {
-    this.authService
-      .signIn(signInData)
-      .pipe(
-        catchError((err) => {
-          console.log('Handling error locally and rethrowing it...', err);
-          return throwError(err);
-        })
-      )
-      .subscribe(
-        (value: User) => {
-          console.log(value);
-          this.router.navigate(['/debts']);
-        },
-        (err) => console.log(err)
-      );
+    console.log(signInData);
+    this.authService.signIn(signInData).subscribe(
+      (value: User) => {
+        console.log(value);
+        this.router.navigate(['/debts']);
+      },
+      (err) => console.log(err)
+    );
   }
 }
