@@ -12,7 +12,9 @@ import { of } from 'rxjs/internal/observable/of';
 export class DebtService {
   private debtsUrl = 'api/debts';
   httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+    }),
   };
 
   constructor(private http: HttpClient) {}
@@ -90,5 +92,13 @@ export class DebtService {
       ? new Date(databaseDebt.paymentDate)
       : null;
     return debt;
+  }
+
+  setBearerToken() {
+    const token = localStorage.getItem('bearerToken');
+    if (token) {
+      this.httpOptions.headers.set('Authorization', token);
+    } else {
+    }
   }
 }

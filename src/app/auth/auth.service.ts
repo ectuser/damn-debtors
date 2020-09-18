@@ -5,13 +5,20 @@ import { Observable, of, throwError } from 'rxjs';
 import { catchError, finalize, tap } from 'rxjs/operators';
 import { User } from '../models/user';
 
+interface AuthResult {
+  success: Boolean;
+  token: string;
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   private authUrl = 'api/auth';
   private httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+    }),
   };
   public isLoggedIn: Boolean = false;
   public redirectUrl: string;
@@ -21,10 +28,9 @@ export class AuthService {
   signIn(credentials) {
     // do the weird stuff to get the user
     return this.http
-      .post<User>('/api/login', credentials, this.httpOptions)
+      .post<AuthResult>('/api/login', credentials, this.httpOptions)
       .pipe(
         tap(() => {
-          console.log('Sequence complete');
           this.isLoggedIn = true;
         }),
         catchError((err) => {
@@ -36,5 +42,13 @@ export class AuthService {
 
   signOut() {
     this.isLoggedIn = false;
+  }
+
+  setBearerToken() {
+    const token = localStorage.getItem('bearerToken');
+    if (token) {
+      this.httpOptions.headers.set('Authorization', token);
+    } else {
+    }
   }
 }
