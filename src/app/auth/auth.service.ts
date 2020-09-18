@@ -60,8 +60,6 @@ export class AuthService {
   }
 
   checkIsTokenValid() {
-    const token = localStorage.getItem('bearerToken');
-    this.httpOptions.headers.append('Authorization', token);
     console.log('fucking options', this.httpOptions);
     return this.http.get('/api/check-the-token', this.httpOptions).pipe(
       tap(() => {
@@ -73,5 +71,9 @@ export class AuthService {
       }),
       map(() => this.isLoggedIn)
     );
+  }
+
+  getAuthorizationToken() {
+    return localStorage.getItem('bearerToken');
   }
 }

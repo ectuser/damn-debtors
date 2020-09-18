@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
-import { DebtService } from '../debtor.service';
+import { DebtService } from '../debt.service';
 import { DatabaseDebt } from '../models/databaseDebt';
 import { Debt } from '../models/debt';
 import { Router } from '@angular/router';

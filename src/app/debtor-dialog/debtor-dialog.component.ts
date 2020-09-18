@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DebtService } from '../debtor.service';
+import { DebtService } from '../debt.service';
 import { Debt } from '../models/debt';
 import { CloseDialogStates } from './closeDialogStates';
 
