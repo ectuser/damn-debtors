@@ -106,7 +106,7 @@ app.get('/api/debts', passport.authenticate('jwt', { session: false }), function
         });
     });
 });
-app.get('/api/debts/:id', function (req, res) {
+app.get('/api/debts/:id', passport.authenticate('jwt', { session: false }), function (req, res) {
     return __awaiter(this, void 0, void 0, function () {
         var debtId, debt;
         return __generator(this, function (_a) {
@@ -133,7 +133,7 @@ app.get('/api/debts/:id', function (req, res) {
         });
     });
 });
-app.post('/api/debts', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+app.post('/api/debts', passport.authenticate('jwt', { session: false }), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, debt, inderted, addedDebt;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -159,7 +159,7 @@ app.post('/api/debts', function (req, res) { return __awaiter(void 0, void 0, vo
         }
     });
 }); });
-app.put('/api/debts/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+app.put('/api/debts/:id', passport.authenticate('jwt', { session: false }), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var debtId, updatedDebt;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -186,7 +186,7 @@ app.put('/api/debts/:id', function (req, res) { return __awaiter(void 0, void 0,
         }
     });
 }); });
-app["delete"]('/api/debts/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+app["delete"]('/api/debts/:id', passport.authenticate('jwt', { session: false }), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var debtId, result;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -209,7 +209,7 @@ app["delete"]('/api/debts/:id', function (req, res) { return __awaiter(void 0, v
         }
     });
 }); });
-app.get('/api/search', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+app.get('/api/search', passport.authenticate('jwt', { session: false }), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var query, regex, debts;
     return __generator(this, function (_a) {
         switch (_a.label) {
@@ -227,7 +227,7 @@ app.get('/api/search', function (req, res) { return __awaiter(void 0, void 0, vo
         }
     });
 }); });
-app.post('/api/users/create', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+app.post('/api/register', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, email, password, salt, encryptedPassword, existedUser, inderted, addedUser;
     return __generator(this, function (_b) {
         switch (_b.label) {
@@ -266,7 +266,7 @@ app.post('/api/users/create', function (req, res) { return __awaiter(void 0, voi
         }
     });
 }); });
-app.post('/api/users/validate', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+app.post('/api/login', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var _a, email, password, user, result, payload;
     return __generator(this, function (_b) {
         switch (_b.label) {
@@ -302,7 +302,7 @@ app.post('/api/users/validate', function (req, res) { return __awaiter(void 0, v
         }
     });
 }); });
-app.get('/api/users/:id', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+app.get('/api/users/:id', passport.authenticate('jwt', { session: false }), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var debtId, user;
     return __generator(this, function (_a) {
         switch (_a.label) {

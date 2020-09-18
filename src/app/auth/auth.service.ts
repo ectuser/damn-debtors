@@ -1,6 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { parseI18nMeta } from '@angular/compiler/src/render3/view/i18n/meta';
 import { Injectable } from '@angular/core';
 import { Observable, of, throwError } from 'rxjs';
+import { catchError, finalize, tap } from 'rxjs/operators';
 import { User } from '../models/user';
 
 @Injectable({
@@ -18,21 +20,18 @@ export class AuthService {
 
   signIn(credentials) {
     // do the weird stuff to get the user
-    const user: User = {
-      email: 'email@example.com',
-      password: 'hGhFnTyNKtSX',
-      id: '_hgeSo6',
-    };
-    let obsUser: Observable<User> = of(user);
-    if (
-      credentials.email !== user.email ||
-      credentials.password !== user.password
-    ) {
-      this.isLoggedIn = false;
-      obsUser = throwError("Can't find user");
-    }
-    this.isLoggedIn = true;
-    return obsUser;
+    return this.http
+      .post<User>('/api/login', credentials, this.httpOptions)
+      .pipe(
+        tap(() => {
+          console.log('Sequence complete');
+          this.isLoggedIn = true;
+        }),
+        catchError((err) => {
+          this.isLoggedIn = false;
+          return throwError(err);
+        })
+      );
   }
 
   signOut() {
