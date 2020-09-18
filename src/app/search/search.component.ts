@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map, startWith, tap } from 'rxjs/operators';
-import { DebtService } from '../debtor.service';
+import { DebtService } from '../debt.service';
 import { Debt } from '../models/debt';
 
 @Component({

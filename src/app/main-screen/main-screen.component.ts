@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { DebtService } from '../debtor.service';
+import { DebtService } from '../debt.service';
 import { DatabaseDebt } from '../models/databaseDebt';
 import { Debt } from '../models/debt';
 import {

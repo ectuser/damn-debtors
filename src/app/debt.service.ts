@@ -20,9 +20,6 @@ export class DebtService {
   constructor(private http: HttpClient) {}
 
   getDebts(): Observable<DatabaseDebt[]> {
-    const token = localStorage.getItem('bearerToken');
-    this.httpOptions.headers.append('Authorization', token);
-    console.log(this.httpOptions, token);
     const data = this.http.get<DatabaseDebt[]>(this.debtsUrl, this.httpOptions);
     console.log(data);
     return data.pipe(

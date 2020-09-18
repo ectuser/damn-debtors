@@ -30,6 +30,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SignInComponent } from './auth/sign-in/sign-in.component';
 import { SignUpComponent } from './auth/sign-up/sign-up.component';
+import { httpInterceptorProviders } from './http-interceptors';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,11 @@ import { SignUpComponent } from './auth/sign-up/sign-up.component';
     MatAutocompleteModule,
     MatSnackBarModule,
   ],
-  providers: [MatDatepickerModule, MatNativeDateModule],
+  providers: [
+    MatDatepickerModule,
+    MatNativeDateModule,
+    httpInterceptorProviders,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
