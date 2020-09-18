@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { parseI18nMeta } from '@angular/compiler/src/render3/view/i18n/meta';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, finalize, map, tap } from 'rxjs/operators';
 import { User } from '../models/user';
@@ -23,7 +24,7 @@ export class AuthService {
   public isLoggedIn = false;
   public redirectUrl: string;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   signIn(credentials) {
     // do the weird stuff to get the user
@@ -39,8 +40,7 @@ export class AuthService {
         }),
         tap((value) => {
           if (this.isLoggedIn) {
-            localStorage.setItem('bearerToken', value.token);
-            this.setBearerToken();
+            this.setAuthorizationToken(value.token);
           }
         })
       );
@@ -48,15 +48,8 @@ export class AuthService {
 
   signOut() {
     this.isLoggedIn = false;
-  }
-
-  setBearerToken() {
-    const token = localStorage.getItem('bearerToken');
-    if (token) {
-      this.httpOptions.headers.set('Authorization', token);
-      console.log(this.httpOptions.headers);
-    } else {
-    }
+    this.setAuthorizationToken('');
+    this.router.navigate(['/sign-in']);
   }
 
   checkIsTokenValid() {
@@ -75,5 +68,8 @@ export class AuthService {
 
   getAuthorizationToken() {
     return localStorage.getItem('bearerToken');
+  }
+  setAuthorizationToken(value: string) {
+    localStorage.setItem('bearerToken', value);
   }
 }
