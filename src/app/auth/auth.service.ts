@@ -6,9 +6,13 @@ import { Observable, of, throwError } from 'rxjs';
 import { catchError, finalize, map, tap } from 'rxjs/operators';
 import { User } from '../models/user';
 
-interface AuthResult {
-  success: Boolean;
+interface SignInResult {
+  success: boolean;
   token: string;
+}
+interface SignUpResult {
+  success: boolean;
+  message: string;
 }
 
 @Injectable({
@@ -29,7 +33,7 @@ export class AuthService {
   signIn(credentials) {
     // do the weird stuff to get the user
     return this.http
-      .post<AuthResult>('/api/login', credentials, this.httpOptions)
+      .post<SignInResult>('/api/login', credentials, this.httpOptions)
       .pipe(
         tap(() => {
           this.isLoggedIn = true;
@@ -41,6 +45,23 @@ export class AuthService {
         tap((value) => {
           if (this.isLoggedIn) {
             this.setAuthorizationToken(value.token);
+          }
+        })
+      );
+  }
+
+  signUp(credentials) {
+    let success: boolean = true;
+    return this.http
+      .post<SignUpResult>('/api/register', credentials, this.httpOptions)
+      .pipe(
+        catchError((err) => {
+          success = false;
+          return throwError(err);
+        }),
+        tap(() => {
+          if (success) {
+            this.router.navigate(['/sign-in']);
           }
         })
       );
