@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AddDebtorComponent } from './add-debtor/add-debtor.component';
+import { AddDebtComponent } from './add-debtor/add-debtor.component';
 import { MainScreenComponent } from './main-screen/main-screen.component';
 import { DebtComponent } from './debt/debt.component';
 import { SearchComponent } from './search/search.component';
@@ -19,7 +19,7 @@ const routes: Routes = [
         redirectTo: '/debts',
         pathMatch: 'full',
       },
-      { path: 'add', component: AddDebtorComponent },
+      { path: 'add', component: AddDebtComponent },
       {
         path: 'debts',
         component: MainScreenComponent,

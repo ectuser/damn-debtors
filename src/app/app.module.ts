@@ -8,7 +8,7 @@ import { MainScreenComponent } from './main-screen/main-screen.component';
 import { HeaderComponent } from './header/header.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTableModule } from '@angular/material/table';
-import { AddDebtorComponent } from './add-debtor/add-debtor.component';
+import { AddDebtComponent } from './add-debtor/add-debtor.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -37,7 +37,7 @@ import { httpInterceptorProviders } from './http-interceptors';
     AppComponent,
     MainScreenComponent,
     HeaderComponent,
-    AddDebtorComponent,
+    AddDebtComponent,
     DebtorDialogComponent,
     DebtComponent,
     SearchComponent,
