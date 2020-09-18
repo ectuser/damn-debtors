@@ -17,7 +17,14 @@
       </mat-form-field>
     </div>
     <div style="text-align: center">
-      <button mat-raised-button color="primary" type="submit">Sign In</button>
+      <button
+        mat-raised-button
+        color="primary"
+        type="submit"
+        [disabled]="!signInForm.valid"
+      >
+        Sign In
+      </button>
     </div>
     <div style="margin-top: 10px">
       <!-- <a mat-button href="https://www.google.com/" target="_blank">Link</a> -->

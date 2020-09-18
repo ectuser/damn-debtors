@@ -1,5 +1,11 @@
 import { Component, Inject } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+  Validators,
+} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DebtService } from '../debt.service';
 import { Debt } from '../models/debt';
@@ -18,8 +24,8 @@ export class DebtorDialogComponent {
     private debtorService: DebtService
   ) {
     this.addDebtForm = new FormGroup({
-      debt: new FormControl(data.debt),
-      name: new FormControl(data.name),
+      debt: new FormControl(data.debt, Validators.required),
+      name: new FormControl(data.name, Validators.required),
       loanDate: new FormControl(data.loanDate),
       paymentDate: new FormControl(data.paymentDate),
     });

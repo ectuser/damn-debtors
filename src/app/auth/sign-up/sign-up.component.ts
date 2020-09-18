@@ -1,6 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ValidationErrors,
+} from '@angular/forms';
 import { AuthService } from '../auth.service';
+import { Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 
 @Component({
   selector: 'app-sign-up',
@@ -10,13 +17,30 @@ import { AuthService } from '../auth.service';
 export class SignUpComponent implements OnInit {
   signUpForm: FormGroup;
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private formBuilder: FormBuilder
+  ) {}
+  matchValues(
+    matchTo: string // name of the control to match to
+  ): (AbstractControl) => ValidationErrors | null {
+    return (control: AbstractControl): ValidationErrors | null => {
+      return !!control.parent &&
+        !!control.parent.value &&
+        control.value === control.parent.controls[matchTo].value
+        ? null
+        : { isMatching: false };
+    };
+  }
 
   ngOnInit(): void {
-    this.signUpForm = new FormGroup({
-      email: new FormControl(),
-      password: new FormControl(),
-      confirmedPassword: new FormControl(),
+    this.signUpForm = this.formBuilder.group({
+      email: ['', [Validators.email, Validators.required]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmedPassword: [
+        '',
+        [Validators.required, this.matchValues('password')],
+      ],
     });
   }
 
