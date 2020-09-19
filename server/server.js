@@ -334,6 +334,7 @@ app.get('/*', function (req, res) {
 // Start the app by listening on the default Heroku port
 app.listen(PORT, function () {
     console.log("Server launched on port " + PORT);
+    console.log("Check this on http://localhost:" + PORT + "/");
 });
 var generateId = function () { return '_' + Math.random().toString(36).substr(2, 9); };
 var encryptPassword = function (password, salt) {
