@@ -8,12 +8,18 @@
       <mat-form-field class="add-debtor-field" style="width: 100%">
         <mat-label>Email</mat-label>
         <input matInput formControlName="email" type="email" />
+        <mat-error *ngIf="signInForm.get('email').invalid">{{
+          getEmailErrorMessage()
+        }}</mat-error>
       </mat-form-field>
     </div>
     <div>
       <mat-form-field class="add-debtor-field" style="width: 100%">
         <mat-label>Password</mat-label>
         <input matInput formControlName="password" type="password" />
+        <mat-error *ngIf="signInForm.get('password').invalid">{{
+          getPasswordErrorMessage()
+        }}</mat-error>
       </mat-form-field>
     </div>
     <div style="text-align: center">

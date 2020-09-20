@@ -3,6 +3,8 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { FormBuilder, Validators } from '@angular/forms';
+import { ValidationErrorTypes } from 'src/app/validation-error-types';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-sign-in',
@@ -14,7 +16,8 @@ export class SignInComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -33,7 +36,29 @@ export class SignInComponent implements OnInit {
           this.router.navigate(['/debts']);
         }
       },
-      (err) => console.log(err)
+      (err) => {
+        console.log(err);
+        const errorMessage =
+          err.error && err.error.message
+            ? err.error.message
+            : "There's some strange error...";
+        this._snackBar.open(errorMessage, null, {
+          duration: 2000,
+        });
+      }
     );
+  }
+
+  getEmailErrorMessage() {
+    const email = this.signInForm.get('email');
+    return email.hasError('required')
+      ? ValidationErrorTypes.FIELD_REQUIRED
+      : '';
+  }
+  getPasswordErrorMessage() {
+    const password = this.signInForm.get('password');
+    return password.hasError('required')
+      ? ValidationErrorTypes.FIELD_REQUIRED
+      : '';
   }
 }

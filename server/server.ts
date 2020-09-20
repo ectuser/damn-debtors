@@ -200,7 +200,7 @@ app.post('/api/login', async (req, res) => {
       }
     );
   } else {
-    res.status(401).json({ message: '123' });
+    res.status(401).json({ message: 'Wrong email or password' });
   }
 });
 app.get(
@@ -235,6 +235,7 @@ app.get('/*', function (req, res) {
 // Start the app by listening on the default Heroku port
 app.listen(PORT, () => {
   console.log(`Server launched on port ${PORT}`);
+  console.log(`URL: http://localhost:${PORT}`);
 });
 
 const generateId = () => '_' + Math.random().toString(36).substr(2, 9);

@@ -9,6 +9,7 @@ import { DebtService } from '../debt.service';
 import { DatabaseDebt } from '../models/databaseDebt';
 import { Debt } from '../models/debt';
 import { Router } from '@angular/router';
+import { ValidationErrorTypes } from '../validation-error-types';
 
 @Component({
   selector: 'app-add-debtor',
@@ -39,5 +40,12 @@ export class AddDebtComponent implements OnInit {
     this.debtorService.addDebt(debtObj).subscribe((debt: DatabaseDebt) => {
       this.router.navigate(['/debts']);
     });
+  }
+
+  getRequiredFieldErrorMessage(fieldName: string) {
+    const field = this.addDebtForm.get(fieldName);
+    return field.hasError('required')
+      ? ValidationErrorTypes.FIELD_REQUIRED
+      : '';
   }
 }
