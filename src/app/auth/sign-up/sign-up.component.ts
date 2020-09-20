@@ -8,6 +8,7 @@ import {
 import { AuthService } from '../auth.service';
 import { Validators } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
+import { ValidationErrorTypes } from 'src/app/validation-error-types';
 
 @Component({
   selector: 'app-sign-up',
@@ -16,6 +17,7 @@ import { FormBuilder } from '@angular/forms';
 })
 export class SignUpComponent implements OnInit {
   signUpForm: FormGroup;
+  private passwordMinLength = 6;
 
   constructor(
     private authService: AuthService,
@@ -36,7 +38,7 @@ export class SignUpComponent implements OnInit {
   ngOnInit(): void {
     this.signUpForm = this.formBuilder.group({
       email: ['', [Validators.email, Validators.required]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, Validators.minLength(this.passwordMinLength)]],
       confirmedPassword: [
         '',
         [Validators.required, this.matchValues('password')],
@@ -64,5 +66,18 @@ export class SignUpComponent implements OnInit {
           console.log(err);
         }
       );
+  }
+
+  getEmailErrorMessage(){
+    const email = this.signUpForm.get('email')
+    return email.hasError('required') ? ValidationErrorTypes.FIELD_REQUIRED : (email.hasError('email')) ? ValidationErrorTypes.INVALID_EMAIL : '';
+  }
+  getPasswordErrorMessage(){
+    const password = this.signUpForm.get('password');
+    return password.hasError('required') ? ValidationErrorTypes.FIELD_REQUIRED : (password.hasError('minLength')) ? ValidationErrorTypes.MIN_LENGTH(this.passwordMinLength) : '';
+  }
+  getConfirmedPasswordErrorMessage(){
+    const confirmedPassword = this.signUpForm.get('confirmedPassword');
+    return confirmedPassword.hasError('required') ? ValidationErrorTypes.FIELD_REQUIRED : '';
   }
 }
