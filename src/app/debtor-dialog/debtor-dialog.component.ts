@@ -10,6 +10,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DebtService } from '../debt.service';
 import { Debt } from '../models/debt';
 import { CloseDialogStates } from './closeDialogStates';
+import { ValidationErrorTypes } from '../validation-error-types';
 
 @Component({
   selector: 'app-debtor-dialog',
@@ -43,5 +44,12 @@ export class DebtorDialogComponent {
       console.log(val);
     });
     this.dialogRef.close(CloseDialogStates.Deleted);
+  }
+
+  getRequiredFieldErrorMessage(fieldName: string) {
+    const field = this.addDebtForm.get(fieldName);
+    return field.hasError('required')
+      ? ValidationErrorTypes.FIELD_REQUIRED
+      : '';
   }
 }
