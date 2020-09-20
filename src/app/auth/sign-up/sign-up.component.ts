@@ -31,7 +31,7 @@ export class SignUpComponent implements OnInit {
         !!control.parent.value &&
         control.value === control.parent.controls[matchTo].value
         ? null
-        : { isMatching: false };
+        : { notMatching: true };
     };
   }
 
@@ -81,17 +81,19 @@ export class SignUpComponent implements OnInit {
   }
   getPasswordErrorMessage() {
     const password = this.signUpForm.get('password');
-    // console.log(password);
     return password.hasError('required')
       ? ValidationErrorTypes.FIELD_REQUIRED
-      : password.hasError('minLength')
+      : password.hasError('minlength')
       ? ValidationErrorTypes.MIN_LENGTH(this.passwordMinLength)
       : '';
   }
   getConfirmedPasswordErrorMessage() {
     const confirmedPassword = this.signUpForm.get('confirmedPassword');
+    console.log(confirmedPassword, confirmedPassword.hasError('isMatching'));
     return confirmedPassword.hasError('required')
       ? ValidationErrorTypes.FIELD_REQUIRED
+      : confirmedPassword.hasError('notMatching')
+      ? ValidationErrorTypes.PASSWORDS_DO_NOT_MATCH
       : '';
   }
 }
