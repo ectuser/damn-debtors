@@ -3,6 +3,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../auth.service';
 import { FormBuilder, Validators } from '@angular/forms';
+import { ValidationErrorTypes } from 'src/app/validation-error-types';
 
 @Component({
   selector: 'app-sign-in',
@@ -35,5 +36,18 @@ export class SignInComponent implements OnInit {
       },
       (err) => console.log(err)
     );
+  }
+
+  getEmailErrorMessage() {
+    const email = this.signInForm.get('email');
+    return email.hasError('required')
+      ? ValidationErrorTypes.FIELD_REQUIRED
+      : '';
+  }
+  getPasswordErrorMessage() {
+    const password = this.signInForm.get('password');
+    return password.hasError('required')
+      ? ValidationErrorTypes.FIELD_REQUIRED
+      : '';
   }
 }

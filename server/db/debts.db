@@ -1,7 +1,5 @@
-{"name":"123","debt":456,"paymentDate":"Wed Sep 30 2020","loanDate":"Tue Sep 01 2020","id":"_t52m81efv","_id":"ENB5mXXGSRY11tPb"}
-{"name":"example","debt":"123","id":"_ktiw4p5t5","_id":"eN4JKso9CyQSqYkM"}
-{"name":"Dmitry","debt":100,"paymentDate":null,"loanDate":null,"id":"_byg6z6ndh","_id":"tr3Vx9tveNtdPnS8"}
-{"id":"_fr9zwef75","name":"Alfred","debt":300,"paymentDate":"Wed Sep 23 2020","loanDate":"Tue Sep 08 2020","_id":"uEYknRz2LagvwI3d"}
-{"id":"_byg6z6ndh","name":"Dmitry","debt":1000,"paymentDate":null,"loanDate":null,"_id":"tr3Vx9tveNtdPnS8"}
-{"$$deleted":true,"_id":"ENB5mXXGSRY11tPb"}
 {"id":"_ktiw4p5t5","name":"Ivan","debt":"123","paymentDate":null,"loanDate":null,"_id":"eN4JKso9CyQSqYkM"}
+{"id":"_byg6z6ndh","name":"Dmitry","debt":1000,"paymentDate":null,"loanDate":null,"_id":"tr3Vx9tveNtdPnS8"}
+{"id":"_fr9zwef75","name":"Alfred","debt":300,"paymentDate":"Wed Sep 23 2020","loanDate":"Tue Sep 08 2020","_id":"uEYknRz2LagvwI3d"}
+{"name":"Dmitry","debt":100,"paymentDate":null,"loanDate":"Tue Sep 15 2020","id":"_8p3m22zgh","_id":"zlspmZf6EL47DkWZ"}
+{"id":"_fr9zwef75","name":"Alfred","debt":300,"paymentDate":"Wed Sep 23 2020","loanDate":"Tue Sep 08 2020","_id":"uEYknRz2LagvwI3d"}
