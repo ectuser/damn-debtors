@@ -98,7 +98,6 @@ export class SignUpComponent implements OnInit {
   }
   getConfirmedPasswordErrorMessage() {
     const confirmedPassword = this.signUpForm.get('confirmedPassword');
-    console.log(confirmedPassword, confirmedPassword.hasError('isMatching'));
     return confirmedPassword.hasError('required')
       ? ValidationErrorTypes.FIELD_REQUIRED
       : confirmedPassword.hasError('notMatching')
