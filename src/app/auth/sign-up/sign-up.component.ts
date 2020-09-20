@@ -9,6 +9,7 @@ import { AuthService } from '../auth.service';
 import { Validators } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
 import { ValidationErrorTypes } from 'src/app/validation-error-types';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-sign-up',
@@ -21,7 +22,8 @@ export class SignUpComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private _snackBar: MatSnackBar
   ) {}
   matchValues(
     matchTo: string // name of the control to match to
@@ -67,6 +69,13 @@ export class SignUpComponent implements OnInit {
         },
         (err) => {
           console.log(err);
+          const errorMessage =
+            err.error && err.error.message
+              ? err.error.message
+              : "There's some strange error...";
+          this._snackBar.open(errorMessage, null, {
+            duration: 2000,
+          });
         }
       );
   }
