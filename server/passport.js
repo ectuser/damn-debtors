@@ -36,47 +36,30 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-require('dotenv').config();
-var express = require('express');
-var path = require('path');
-var bodyParser = require('body-parser');
-var passport_1 = require("./passport");
+var passport = require('passport');
+var _a = require('passport-jwt'), Strategy = _a.Strategy, ExtractJwt = _a.ExtractJwt;
 var dbConnection_1 = require("./db/dbConnection");
-var debts_1 = require("./api/routes/debts");
-var auth_1 = require("./api/routes/auth");
-var users_1 = require("./api/routes/users");
-var app = express();
-var PORT = process.env.PORT || 8080;
-// Serve only the static files form the dist directory
-app.use(express.static('./dist/damn-debtors'));
-app.use(bodyParser.json());
-// API
-app.use('/api/debts', debts_1["default"]);
-app.use('/api/auth', auth_1["default"]);
-app.use('/api/users', users_1["default"]);
-app.get('/api/search', passport_1["default"].authenticate('jwt', { session: false }), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var query, regex, debts;
+var securityService_1 = require("./services/securityService");
+var opts = {
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: securityService_1.getSecretForPassport()
+};
+passport.use(new Strategy(opts, function (payload, done) { return __awaiter(void 0, void 0, void 0, function () {
+    var user;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0:
-                query = req.query.searchData;
-                if (!query) {
-                    res.status(400).json({ message: 'Bad request' });
-                }
-                regex = new RegExp("" + query, 'i');
-                return [4 /*yield*/, dbConnection_1.debtsDb.find({ name: regex })];
+            case 0: return [4 /*yield*/, dbConnection_1.usersDb
+                    .findOne({ id: payload.id })["catch"](function (err) { return console.error(err); })];
             case 1:
-                debts = _a.sent();
-                res.send(debts);
-                return [2 /*return*/];
+                user = _a.sent();
+                if (!user) {
+                    return [2 /*return*/, done(null, false)];
+                }
+                return [2 /*return*/, done(null, {
+                        id: user.id,
+                        email: user.email
+                    })];
         }
     });
-}); });
-app.get('/*', function (req, res) {
-    res.sendFile('index.html', { root: 'dist/damn-debtors/' });
-});
-// Start the app by listening on the default Heroku port
-app.listen(PORT, function () {
-    console.log("Server launched on port " + PORT);
-    console.log("URL: http://localhost:" + PORT);
-});
+}); }));
+exports["default"] = passport;
