@@ -37,45 +37,32 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 var express = require('express');
-var path = require('path');
+var usersRouter = express.Router();
 var bodyParser = require('body-parser');
-var passport_1 = require("./passport");
-var dbConnection_1 = require("./db/dbConnection");
-var debts_1 = require("./api/routes/debts");
-var auth_1 = require("./api/routes/auth");
-var users_1 = require("./api/routes/users");
-var app = express();
-var PORT = process.env.PORT || 8080;
-// Serve only the static files form the dist directory
-app.use(express.static('./dist/damn-debtors'));
-app.use(bodyParser.json());
-// API
-app.use('/api/debts', debts_1["default"]);
-app.use('/api/auth', auth_1["default"]);
-app.use('/api/users', users_1["default"]);
-app.get('/api/search', passport_1["default"].authenticate('jwt', { session: false }), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var query, regex, debts;
+var jwt = require('jsonwebtoken');
+var dbConnection_1 = require("../../db/dbConnection");
+var passport_1 = require("../../passport");
+usersRouter.get('/:id', passport_1["default"].authenticate('jwt', { session: false }), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var debtId, user;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                query = req.query.searchData;
-                if (!query) {
-                    res.status(400).json({ message: 'Bad request' });
+                debtId = req.params.id;
+                if (!debtId) {
+                    res.status(400).json({ message: 'Bad Request' });
+                    return [2 /*return*/];
                 }
-                regex = new RegExp("" + query, 'i');
-                return [4 /*yield*/, dbConnection_1.debtsDb.find({ name: regex })];
+                return [4 /*yield*/, dbConnection_1.usersDb.findOne({ id: debtId })];
             case 1:
-                debts = _a.sent();
-                res.send(debts);
+                user = _a.sent();
+                if (user) {
+                    res.json(user);
+                }
+                else {
+                    res.status(404).json({ message: "Can't find the user" });
+                }
                 return [2 /*return*/];
         }
     });
 }); });
-app.get('/*', function (req, res) {
-    res.sendFile('index.html', { root: 'dist/damn-debtors/' });
-});
-// Start the app by listening on the default Heroku port
-app.listen(PORT, function () {
-    console.log("Server launched on port " + PORT);
-    console.log("URL: http://localhost:" + PORT);
-});
+exports["default"] = usersRouter;

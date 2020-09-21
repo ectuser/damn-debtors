@@ -33,7 +33,11 @@ export class AuthService {
   signIn(credentials) {
     // do the weird stuff to get the user
     return this.http
-      .post<SignInResult>('/api/login', credentials, this.httpOptions)
+      .post<SignInResult>(
+        `${this.authUrl}/login`,
+        credentials,
+        this.httpOptions
+      )
       .pipe(
         tap(() => {
           this.isLoggedIn = true;
@@ -53,7 +57,11 @@ export class AuthService {
   signUp(credentials) {
     let success: boolean = true;
     return this.http
-      .post<SignUpResult>('/api/register', credentials, this.httpOptions)
+      .post<SignUpResult>(
+        `${this.authUrl}/register`,
+        credentials,
+        this.httpOptions
+      )
       .pipe(
         catchError((err) => {
           success = false;
@@ -76,16 +84,18 @@ export class AuthService {
 
   checkIsTokenValid() {
     console.log('fucking options', this.httpOptions);
-    return this.http.get('/api/check-the-token', this.httpOptions).pipe(
-      tap(() => {
-        this.isLoggedIn = true;
-      }),
-      catchError((err) => {
-        this.isLoggedIn = false;
-        return of(false);
-      }),
-      map(() => this.isLoggedIn)
-    );
+    return this.http
+      .get(`${this.authUrl}/check-the-token`, this.httpOptions)
+      .pipe(
+        tap(() => {
+          this.isLoggedIn = true;
+        }),
+        catchError((err) => {
+          this.isLoggedIn = false;
+          return of(false);
+        }),
+        map(() => this.isLoggedIn)
+      );
   }
 
   getAuthorizationToken() {
