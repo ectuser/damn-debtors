@@ -39,9 +39,10 @@ exports.__esModule = true;
 var passport = require('passport');
 var _a = require('passport-jwt'), Strategy = _a.Strategy, ExtractJwt = _a.ExtractJwt;
 var dbConnection_1 = require("./db/dbConnection");
+var securityService_1 = require("./services/securityService");
 var opts = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-    secretOrKey: 'idkwhatisitsorry'
+    secretOrKey: securityService_1.getSecretForPassport()
 };
 passport.use(new Strategy(opts, function (payload, done) { return __awaiter(void 0, void 0, void 0, function () {
     var user;

@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+require('dotenv').config();
 var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');

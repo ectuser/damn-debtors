@@ -9,6 +9,7 @@ import {
   generateId,
   encryptPassword,
   generateSalt,
+  getSecretForPassport,
 } from '../../services/securityService';
 
 authRouter.post('/register', async (req, res) => {
@@ -47,6 +48,11 @@ authRouter.post('/login', async (req, res) => {
 
   const user = await usersDb.findOne({ email });
 
+  if (!user) {
+    res.status(401).json({ message: 'Wrong email or password' });
+    return;
+  }
+
   const result = checkThePassword(password, user.password, user.salt);
   if (result) {
     const payload = {
@@ -55,7 +61,7 @@ authRouter.post('/login', async (req, res) => {
     };
     jwt.sign(
       payload,
-      'idkwhatisitsorry',
+      getSecretForPassport(),
       { expiresIn: 36000 },
       (err, token) => {
         if (err)

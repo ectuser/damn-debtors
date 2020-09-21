@@ -14,3 +14,6 @@ export const checkThePassword = (
 };
 export const generateSalt = (): string =>
   crypto.randomBytes(16).toString('hex');
+
+export const getSecretForPassport = (): string =>
+  process.env.SECRET_FOR_PASSPORT;

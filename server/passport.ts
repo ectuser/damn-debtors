@@ -1,9 +1,10 @@
 const passport = require('passport');
 const { Strategy, ExtractJwt } = require('passport-jwt');
 import { debtsDb, usersDb } from './db/dbConnection';
+import { getSecretForPassport } from './services/securityService';
 const opts = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: 'idkwhatisitsorry',
+  secretOrKey: getSecretForPassport(),
 };
 passport.use(
   new Strategy(opts, async (payload, done) => {
