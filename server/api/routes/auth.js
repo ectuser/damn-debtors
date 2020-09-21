@@ -92,12 +92,12 @@ authRouter.post('/login', function (req, res) { return __awaiter(void 0, void 0,
                     return [2 /*return*/];
                 }
                 _a = req.body, email = _a.email, password = _a.password;
-                console.log(req.body);
                 return [4 /*yield*/, dbConnection_1.usersDb.findOne({ email: email })];
             case 1:
                 user = _b.sent();
                 if (!user) {
                     res.status(401).json({ message: 'Wrong email or password' });
+                    return [2 /*return*/];
                 }
                 result = securityService_1.checkThePassword(password, user.password, user.salt);
                 if (result) {

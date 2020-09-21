@@ -11,8 +11,13 @@ debtsRouter.get(
   '/',
   passport.authenticate('jwt', { session: false }),
   async function (req, res) {
+    if (!req.user || !req.user.id) {
+      res.status(400).json({ message: 'Bad request' });
+      return;
+    }
+    const userId = req.user.id;
     try {
-      const debts = await debtsDb.find({});
+      const debts = await debtsDb.find({ userId });
       res.json(debts);
     } catch (error) {
       res.status(500).json({ message: 'Something went wrong' });
@@ -24,12 +29,13 @@ debtsRouter.get(
   passport.authenticate('jwt', { session: false }),
   async function (req, res) {
     const debtId = req.params.id;
-    if (!debtId) {
+    if (!debtId || !req.user || !req.user.id) {
       res.status(400).json({ message: 'Bad Request' });
       return;
     }
+    const userId = req.user.id;
     console.log(debtId);
-    const debt = await debtsDb.findOne({ id: debtId });
+    const debt = await debtsDb.findOne({ id: debtId, userId });
     console.log(debt);
     if (debt) {
       res.json(debt);
@@ -46,8 +52,13 @@ debtsRouter.post(
       res.status(400).json({ message: 'Bad params' });
       return;
     }
+    if (!req.user || !req.user.id) {
+      res.status(400).json({ message: 'Bad request' });
+      return;
+    }
     const id = generateId();
-    const debt: DatabaseDebt = { ...req.body, id };
+    const userId = req.user.id;
+    const debt: DatabaseDebt = { ...req.body, id, userId };
     const inderted = await debtsDb.insert({ ...debt });
     const addedDebt = await debtsDb.findOne({ _id: inderted._id });
     if (!addedDebt) {
@@ -66,12 +77,13 @@ debtsRouter.put(
       res.status(400).json({ message: 'Bad Request' });
       return;
     }
-    if (!req.body.name || !req.body.debt) {
+    if (!req.body.name || !req.body.debt || !req.user || !req.user.id) {
       res.status(400).json({ message: 'Bad params' });
       return;
     }
+    const userId = req.user.id;
     const updatedDebt = await debtsDb.update(
-      { id: debtId },
+      { id: debtId, userId },
       { id: debtId, ...req.body }
     );
     if (updatedDebt) {
@@ -86,11 +98,12 @@ debtsRouter.delete(
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     const debtId = req.params.id;
-    if (!debtId) {
+    if (!debtId || !req.user || !req.user.id) {
       res.status(400).json({ message: 'Bad Request' });
       return;
     }
-    let result = await debtsDb.remove({ id: debtId }, {});
+    const userId = req.user.id;
+    let result = await debtsDb.remove({ id: debtId, userId }, {});
     if (result) {
       res.status(200).json({ message: 'Successfully deleted' });
     } else {

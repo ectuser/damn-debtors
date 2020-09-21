@@ -55,21 +55,28 @@ var debtsRouter = express.Router();
 var bodyParser = require('body-parser');
 debtsRouter.get('/', passport_1["default"].authenticate('jwt', { session: false }), function (req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var debts, error_1;
+        var userId, debts, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, dbConnection_1.debtsDb.find({})];
+                    if (!req.user || !req.user.id) {
+                        res.status(400).json({ message: 'Bad request' });
+                        return [2 /*return*/];
+                    }
+                    userId = req.user.id;
+                    _a.label = 1;
                 case 1:
+                    _a.trys.push([1, 3, , 4]);
+                    return [4 /*yield*/, dbConnection_1.debtsDb.find({ userId: userId })];
+                case 2:
                     debts = _a.sent();
                     res.json(debts);
-                    return [3 /*break*/, 3];
-                case 2:
+                    return [3 /*break*/, 4];
+                case 3:
                     error_1 = _a.sent();
                     res.status(500).json({ message: 'Something went wrong' });
-                    return [3 /*break*/, 3];
-                case 3: return [2 /*return*/];
+                    return [3 /*break*/, 4];
+                case 4: return [2 /*return*/];
             }
         });
     });
@@ -102,7 +109,7 @@ debtsRouter.get('/:id', passport_1["default"].authenticate('jwt', { session: fal
     });
 });
 debtsRouter.post('/', passport_1["default"].authenticate('jwt', { session: false }), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var id, debt, inderted, addedDebt;
+    var id, userId, debt, inderted, addedDebt;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -110,8 +117,13 @@ debtsRouter.post('/', passport_1["default"].authenticate('jwt', { session: false
                     res.status(400).json({ message: 'Bad params' });
                     return [2 /*return*/];
                 }
+                if (!req.user || !req.user.id) {
+                    res.status(400).json({ message: 'Bad params' });
+                    return [2 /*return*/];
+                }
                 id = securityService_1.generateId();
-                debt = __assign(__assign({}, req.body), { id: id });
+                userId = req.user.id;
+                debt = __assign(__assign({}, req.body), { id: id, userId: userId });
                 return [4 /*yield*/, dbConnection_1.debtsDb.insert(__assign({}, debt))];
             case 1:
                 inderted = _a.sent();
