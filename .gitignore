@@ -4,6 +4,9 @@
 /server/db
 *.db
 
+#Do not include .env
+.env
+
 # compiled output
 /dist
 /tmp
