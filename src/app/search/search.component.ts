@@ -1,53 +1,46 @@
-import { FocusMonitorDetectionMode } from '@angular/cdk/a11y';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { map, startWith, tap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { DebtService } from '../debt.service';
 import { Debt } from '../models/debt';
-import { Router } from '@angular/router';
-import { Location } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DatabaseDebt } from '../models/databaseDebt';
 
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss'],
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
   formGroup: FormGroup;
-  debts: Debt[];
   shownDebts: Debt[];
+
+  private unsubscribe = new Subject();
+
   constructor(
     private debtorService: DebtService,
     private router: Router,
-    private location: Location
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
-    this.search();
-    // this.debtorService.getDebts().subscribe((dbDebts) => {
-    //   const debts = dbDebts.map((dbDebt) =>
-    //     this.debtorService.transformDatabaseDebtToDebt(dbDebt)
-    //   );
-    //   this.debts = [...debts];
-    //   this.shownDebts = [...debts];
-    // });
+    this.formGroup = new FormGroup({
+      control: new FormControl(),
+    });
 
-    // this.formGroup.get('control').valueChanges.subscribe((value) => {
-    //   if (value.length < 3) {
-    //     return;
-    //   }
-    //   const encodedUserInput = encodeURIComponent(value);
-    //   this.debtorService
-    //     .findDebtsByName(encodedUserInput)
-    //     .subscribe((dbDebts) => {
-    //       this.shownDebts = [
-    //         ...dbDebts.map((dbDebt) =>
-    //           this.debtorService.transformDatabaseDebtToDebt(dbDebt)
-    //         ),
-    //       ];
-    //     });
-    // });
+    this.route.queryParams
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(({ searchData }) => {
+        // fire search if any data
+        console.log(searchData);
+        this.search(searchData);
+      });
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
   }
 
   onSubmit(formData) {
@@ -55,32 +48,33 @@ export class SearchComponent implements OnInit {
       return;
     }
     const encodedUserInput = encodeURIComponent(formData.control);
-    console.log(encodedUserInput);
-    // this.router.navigate([`search?searchData=${encodedUserInput}`]);
     this.router.navigate(['/search'], {
       queryParams: { searchData: encodedUserInput },
     });
-    // this.location.go(`/search?searchData=${encodedUserInput}`);
-    // this.search();
-    // this.location.replaceState(`/search?searchData=${encodedUserInput}`);
   }
 
-  search() {
-    const urlTree = this.router.parseUrl(this.router.url);
-    const searchData =
-      urlTree.queryParams && urlTree.queryParams.searchData
-        ? urlTree.queryParams.searchData
-        : '';
-    this.formGroup = new FormGroup({
-      control: new FormControl(searchData),
+  search(name?: string) {
+    if (!name) {
+      return this.getAllDebts();
+    }
+    const decoedName = decodeURIComponent(name);
+    this.formGroup.patchValue({ control: decoedName });
+    console.log(decoedName);
+    this.debtorService.findDebtsByName(decoedName).subscribe((dbDebts) => {
+      this.getDbDebts(dbDebts);
     });
-    console.log(searchData);
-    this.debtorService.findDebtsByName(searchData).subscribe((dbDebts) => {
-      this.shownDebts = [
-        ...dbDebts.map((dbDebt) =>
-          this.debtorService.transformDatabaseDebtToDebt(dbDebt)
-        ),
-      ];
+  }
+  getAllDebts() {
+    this.debtorService.getDebts().subscribe((dbDebts) => {
+      this.getDbDebts(dbDebts);
     });
+  }
+
+  getDbDebts(dbDebts: DatabaseDebt[]) {
+    this.shownDebts = [
+      ...dbDebts.map((dbDebt) =>
+        this.debtorService.transformDatabaseDebtToDebt(dbDebt)
+      ),
+    ];
   }
 }
