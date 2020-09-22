@@ -83,17 +83,18 @@ debtsRouter.get('/', passport_1["default"].authenticate('jwt', { session: false 
 });
 debtsRouter.get('/:id', passport_1["default"].authenticate('jwt', { session: false }), function (req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var debtId, debt;
+        var debtId, userId, debt;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
                     debtId = req.params.id;
-                    if (!debtId) {
+                    if (!debtId || !req.user || !req.user.id) {
                         res.status(400).json({ message: 'Bad Request' });
                         return [2 /*return*/];
                     }
+                    userId = req.user.id;
                     console.log(debtId);
-                    return [4 /*yield*/, dbConnection_1.debtsDb.findOne({ id: debtId })];
+                    return [4 /*yield*/, dbConnection_1.debtsDb.findOne({ id: debtId, userId: userId })];
                 case 1:
                     debt = _a.sent();
                     console.log(debt);
@@ -118,7 +119,7 @@ debtsRouter.post('/', passport_1["default"].authenticate('jwt', { session: false
                     return [2 /*return*/];
                 }
                 if (!req.user || !req.user.id) {
-                    res.status(400).json({ message: 'Bad params' });
+                    res.status(400).json({ message: 'Bad request' });
                     return [2 /*return*/];
                 }
                 id = securityService_1.generateId();
@@ -140,7 +141,7 @@ debtsRouter.post('/', passport_1["default"].authenticate('jwt', { session: false
     });
 }); });
 debtsRouter.put('/:id', passport_1["default"].authenticate('jwt', { session: false }), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var debtId, updatedDebt;
+    var debtId, userId, updatedDebt;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -149,11 +150,12 @@ debtsRouter.put('/:id', passport_1["default"].authenticate('jwt', { session: fal
                     res.status(400).json({ message: 'Bad Request' });
                     return [2 /*return*/];
                 }
-                if (!req.body.name || !req.body.debt) {
+                if (!req.body.name || !req.body.debt || !req.user || !req.user.id) {
                     res.status(400).json({ message: 'Bad params' });
                     return [2 /*return*/];
                 }
-                return [4 /*yield*/, dbConnection_1.debtsDb.update({ id: debtId }, __assign({ id: debtId }, req.body))];
+                userId = req.user.id;
+                return [4 /*yield*/, dbConnection_1.debtsDb.update({ id: debtId, userId: userId }, __assign({ id: debtId }, req.body))];
             case 1:
                 updatedDebt = _a.sent();
                 if (updatedDebt) {
@@ -167,16 +169,17 @@ debtsRouter.put('/:id', passport_1["default"].authenticate('jwt', { session: fal
     });
 }); });
 debtsRouter["delete"]('/:id', passport_1["default"].authenticate('jwt', { session: false }), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var debtId, result;
+    var debtId, userId, result;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 debtId = req.params.id;
-                if (!debtId) {
+                if (!debtId || !req.user || !req.user.id) {
                     res.status(400).json({ message: 'Bad Request' });
                     return [2 /*return*/];
                 }
-                return [4 /*yield*/, dbConnection_1.debtsDb.remove({ id: debtId }, {})];
+                userId = req.user.id;
+                return [4 /*yield*/, dbConnection_1.debtsDb.remove({ id: debtId, userId: userId }, {})];
             case 1:
                 result = _a.sent();
                 if (result) {
