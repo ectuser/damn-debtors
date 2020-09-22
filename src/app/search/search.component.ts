@@ -1,46 +1,80 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
-import { map, startWith, tap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { DebtService } from '../debt.service';
 import { Debt } from '../models/debt';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DatabaseDebt } from '../models/databaseDebt';
 
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss'],
 })
-export class SearchComponent implements OnInit {
-  formGroup = new FormGroup({
-    control: new FormControl(),
-  });
-  debts: Debt[];
+export class SearchComponent implements OnInit, OnDestroy {
+  formGroup: FormGroup;
   shownDebts: Debt[];
-  constructor(private debtorService: DebtService) {}
+
+  private unsubscribe = new Subject();
+
+  constructor(
+    private debtorService: DebtService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
-    this.debtorService.getDebts().subscribe((dbDebts) => {
-      const debts = dbDebts.map((dbDebt) =>
-        this.debtorService.transformDatabaseDebtToDebt(dbDebt)
-      );
-      this.debts = [...debts];
-      this.shownDebts = [...debts];
+    this.formGroup = new FormGroup({
+      control: new FormControl(),
     });
 
-    this.formGroup.get('control').valueChanges.subscribe((value) => {
-      if (value.length < 3) {
-        return;
-      }
-      const encodedUserInput = encodeURIComponent(value);
-      this.debtorService
-        .findDebtsByName(encodedUserInput)
-        .subscribe((dbDebts) => {
-          this.shownDebts = [
-            ...dbDebts.map((dbDebt) =>
-              this.debtorService.transformDatabaseDebtToDebt(dbDebt)
-            ),
-          ];
-        });
+    this.route.queryParams
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(({ searchData }) => {
+        // fire search if any data
+        console.log(searchData);
+        this.search(searchData);
+      });
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
+  }
+
+  onSubmit(formData) {
+    if (!formData || !formData.control) {
+      return;
+    }
+    const encodedUserInput = encodeURIComponent(formData.control);
+    this.router.navigate(['/search'], {
+      queryParams: { searchData: encodedUserInput },
     });
+  }
+
+  search(name?: string) {
+    if (!name) {
+      return this.getAllDebts();
+    }
+    const decoedName = decodeURIComponent(name);
+    this.formGroup.patchValue({ control: decoedName });
+    console.log(decoedName);
+    this.debtorService.findDebtsByName(decoedName).subscribe((dbDebts) => {
+      this.getDbDebts(dbDebts);
+    });
+  }
+  getAllDebts() {
+    this.debtorService.getDebts().subscribe((dbDebts) => {
+      this.getDbDebts(dbDebts);
+    });
+  }
+
+  getDbDebts(dbDebts: DatabaseDebt[]) {
+    this.shownDebts = [
+      ...dbDebts.map((dbDebt) =>
+        this.debtorService.transformDatabaseDebtToDebt(dbDebt)
+      ),
+    ];
   }
 }

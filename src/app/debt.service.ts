@@ -59,9 +59,9 @@ export class DebtService {
       .pipe(catchError(() => throwError("Can't find debt")));
   }
 
-  findDebtsByName(searchString: string): Observable<DatabaseDebt[]> {
-    const url = `api/search?searchData=${searchString}`;
-    return this.http.get<DatabaseDebt[]>(url);
+  findDebtsByName(name: string): Observable<DatabaseDebt[]> {
+    const requestUrl = `api/search?searchData=${name}`;
+    return this.http.get<DatabaseDebt[]>(requestUrl);
   }
 
   public transformDebtToDatabaseDebt(debt: Debt): DatabaseDebt {
