@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { parseI18nMeta } from '@angular/compiler/src/render3/view/i18n/meta';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of, Subscriber, throwError } from 'rxjs';
 import { catchError, finalize, map, tap } from 'rxjs/operators';
 
 interface SignInResult {
@@ -66,11 +66,6 @@ export class AuthService {
           success = false;
           console.log(err);
           return throwError(err);
-        }),
-        tap(() => {
-          if (success) {
-            this.router.navigate(['/sign-in']);
-          }
         })
       );
   }
@@ -78,7 +73,9 @@ export class AuthService {
   signOut() {
     this.isLoggedIn = false;
     this.setAuthorizationToken('');
-    this.router.navigate(['/sign-in']);
+    return new Observable((subscriber) => {
+      subscriber.next({ message: 'success' });
+    });
   }
 
   checkIsTokenValid() {
