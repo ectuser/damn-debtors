@@ -31,6 +31,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SignInComponent } from './auth/sign-in/sign-in.component';
 import { SignUpComponent } from './auth/sign-up/sign-up.component';
 import { httpInterceptorProviders } from './http-interceptors';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 @NgModule({
   declarations: [
@@ -65,6 +66,7 @@ import { httpInterceptorProviders } from './http-interceptors';
     MatCardModule,
     MatAutocompleteModule,
     MatSnackBarModule,
+    MatGridListModule,
   ],
   providers: [
     MatDatepickerModule,

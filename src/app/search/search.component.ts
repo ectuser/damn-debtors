@@ -2,10 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { DebtService } from '../debt.service';
 import { Debt } from '../models/debt';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatabaseDebt } from '../models/databaseDebt';
+import { DebtListService } from '../debt-list.service';
 
 @Component({
   selector: 'app-search',
@@ -19,9 +19,9 @@ export class SearchComponent implements OnInit, OnDestroy {
   private unsubscribe = new Subject();
 
   constructor(
-    private debtorService: DebtService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private debtListService: DebtListService
   ) {}
 
   ngOnInit(): void {
@@ -32,10 +32,18 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.route.queryParams
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(({ searchData }) => {
-        // fire search if any data
         console.log(searchData);
-        this.search(searchData);
+        this.debtListService.searchDebts(searchData);
+        if (searchData) {
+          this.formGroup.patchValue({
+            control: decodeURIComponent(searchData),
+          });
+        }
       });
+
+    this.debtListService.Debts.subscribe((value) => {
+      this.shownDebts = value;
+    });
   }
 
   ngOnDestroy() {
@@ -51,30 +59,5 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.router.navigate(['/search'], {
       queryParams: { searchData: encodedUserInput },
     });
-  }
-
-  search(name?: string) {
-    if (!name) {
-      return this.getAllDebts();
-    }
-    const decoedName = decodeURIComponent(name);
-    this.formGroup.patchValue({ control: decoedName });
-    console.log(decoedName);
-    this.debtorService.findDebtsByName(decoedName).subscribe((dbDebts) => {
-      this.getDbDebts(dbDebts);
-    });
-  }
-  getAllDebts() {
-    this.debtorService.getDebts().subscribe((dbDebts) => {
-      this.getDbDebts(dbDebts);
-    });
-  }
-
-  getDbDebts(dbDebts: DatabaseDebt[]) {
-    this.shownDebts = [
-      ...dbDebts.map((dbDebt) =>
-        this.debtorService.transformDatabaseDebtToDebt(dbDebt)
-      ),
-    ];
   }
 }
