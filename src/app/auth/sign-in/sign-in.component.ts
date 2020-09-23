@@ -17,7 +17,7 @@ export class SignInComponent implements OnInit {
     private authService: AuthService,
     private router: Router,
     private formBuilder: FormBuilder,
-    private _snackBar: MatSnackBar
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -42,7 +42,7 @@ export class SignInComponent implements OnInit {
           err.error && err.error.message
             ? err.error.message
             : "There's some strange error...";
-        this._snackBar.open(errorMessage, null, {
+        this.snackBar.open(errorMessage, null, {
           duration: 2000,
         });
       }

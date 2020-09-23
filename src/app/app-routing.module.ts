@@ -31,7 +31,6 @@ const routes: Routes = [
   { path: 'sign-in', component: SignInComponent },
   { path: 'sign-up', component: SignUpComponent },
   { path: '**', component: NotFoundComponent },
-  { path: '404', component: NotFoundComponent },
 ];
 
 @NgModule({

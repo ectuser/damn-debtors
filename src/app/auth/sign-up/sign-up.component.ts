@@ -28,13 +28,12 @@ export class SignUpComponent implements OnInit {
   matchValues(
     matchTo: string // name of the control to match to
   ): (AbstractControl) => ValidationErrors | null {
-    return (control: AbstractControl): ValidationErrors | null => {
-      return !!control.parent &&
-        !!control.parent.value &&
-        control.value === control.parent.controls[matchTo].value
+    return (control: AbstractControl): ValidationErrors | null =>
+      !!control.parent &&
+      !!control.parent.value &&
+      control.value === control.parent.controls[matchTo].value
         ? null
         : { notMatching: true };
-    };
   }
 
   ngOnInit(): void {

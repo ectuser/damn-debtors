@@ -155,7 +155,7 @@ debtsRouter.put('/:id', passport_1["default"].authenticate('jwt', { session: fal
                     return [2 /*return*/];
                 }
                 userId = req.user.id;
-                return [4 /*yield*/, dbConnection_1.debtsDb.update({ id: debtId, userId: userId }, __assign({ id: debtId }, req.body))];
+                return [4 /*yield*/, dbConnection_1.debtsDb.update({ id: debtId, userId: userId }, __assign(__assign({ id: debtId }, req.body), { userId: userId }))];
             case 1:
                 updatedDebt = _a.sent();
                 if (updatedDebt) {

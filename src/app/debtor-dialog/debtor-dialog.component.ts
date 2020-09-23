@@ -34,9 +34,10 @@ export class DebtorDialogComponent {
 
   onSubmit(formValues: Debt): void {
     console.log(formValues);
-    let newDebtorObject: Debt = { id: this.data.id, ...formValues };
-    this.debtorService.updateDebt(newDebtorObject).subscribe(() => {});
-    this.dialogRef.close(CloseDialogStates.Updated);
+    let newDebtObject: Debt = { id: this.data.id, ...formValues };
+    this.debtorService.updateDebt(newDebtObject).subscribe(() => {
+      this.dialogRef.close(CloseDialogStates.Updated);
+    });
   }
 
   deleteDebt() {

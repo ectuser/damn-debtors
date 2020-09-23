@@ -84,7 +84,7 @@ debtsRouter.put(
     const userId = req.user.id;
     const updatedDebt = await debtsDb.update(
       { id: debtId, userId },
-      { id: debtId, ...req.body }
+      { id: debtId, ...req.body, userId }
     );
     if (updatedDebt) {
       res.json({ message: 'Successfully updated' });
