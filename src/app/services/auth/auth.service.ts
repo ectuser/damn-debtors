@@ -1,9 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { parseI18nMeta } from '@angular/compiler/src/render3/view/i18n/meta';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, of, Subscriber, throwError } from 'rxjs';
-import { catchError, finalize, map, tap } from 'rxjs/operators';
+import { Observable, of, throwError } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 
 interface SignInResult {
   success: boolean;

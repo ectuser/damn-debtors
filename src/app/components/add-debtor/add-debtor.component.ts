@@ -1,10 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  FormControl,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DatabaseDebt } from 'src/app/models/databaseDebt';
 import { DebtService } from 'src/app/services/debt/debt.service';
@@ -16,7 +11,7 @@ import { ValidationErrorTypes } from 'src/app/validation-error-types';
   styleUrls: ['./add-debtor.component.scss'],
 })
 export class AddDebtComponent implements OnInit {
-  addDebtForm;
+  addDebtForm: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -26,8 +21,8 @@ export class AddDebtComponent implements OnInit {
     this.addDebtForm = this.formBuilder.group({
       debt: ['', Validators.required],
       name: ['', Validators.required],
-      loanDate: new FormControl(),
-      paymentDate: new FormControl(),
+      loanDate: [''],
+      paymentDate: [''],
     });
   }
 

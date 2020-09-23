@@ -28,10 +28,8 @@ export class SignInComponent implements OnInit {
   }
 
   onSubmit(signInData): void {
-    console.log(signInData);
     this.authService.signIn(signInData).subscribe(
       (value) => {
-        console.log(value);
         if (value.token && value.success) {
           this.router.navigate(['/debts']);
         }
