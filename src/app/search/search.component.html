@@ -1,23 +1,21 @@
 <form [formGroup]="formGroup" (ngSubmit)="onSubmit(formGroup.value)">
-  <mat-form-field class="w-100">
-    <input
-      type="text"
-      placeholder="Type the name"
-      aria-label="Number"
-      matInput
-      formControlName="control"
-      class="debt-search-input"
-    />
-    <!-- <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-        <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-          {{option}}
-        </mat-option>
-      </mat-autocomplete> -->
-  </mat-form-field>
-  <button mat-button color="primary" type="submit">Search</button>
-  <!-- <pre> -->
-  <!-- {{shownDebts}} -->
-  <!-- </pre> -->
+  <mat-grid-list cols="7">
+    <mat-grid-tile [colspan]="5">
+      <mat-form-field class="w-100">
+        <input
+          type="text"
+          placeholder="Type the name"
+          aria-label="Number"
+          matInput
+          formControlName="control"
+          class="debt-search-input"
+        />
+      </mat-form-field>
+    </mat-grid-tile>
+    <mat-grid-tile [colspan]="2">
+      <button mat-button color="primary" type="submit">Search</button>
+    </mat-grid-tile>
+  </mat-grid-list>
 </form>
 <mat-card
   *ngFor="let debt of shownDebts"

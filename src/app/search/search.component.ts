@@ -34,7 +34,11 @@ export class SearchComponent implements OnInit, OnDestroy {
       .subscribe(({ searchData }) => {
         console.log(searchData);
         this.debtListService.searchDebts(searchData);
-        this.formGroup.patchValue({ control: decodeURIComponent(searchData) });
+        if (searchData) {
+          this.formGroup.patchValue({
+            control: decodeURIComponent(searchData),
+          });
+        }
       });
 
     this.debtListService.Debts.subscribe((value) => {
