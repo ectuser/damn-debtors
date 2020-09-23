@@ -5,11 +5,10 @@ import {
   FormControl,
   Validators,
 } from '@angular/forms';
-import { DebtService } from '../debt.service';
-import { DatabaseDebt } from '../models/databaseDebt';
-import { Debt } from '../models/debt';
 import { Router } from '@angular/router';
-import { ValidationErrorTypes } from '../validation-error-types';
+import { DatabaseDebt } from 'src/app/models/databaseDebt';
+import { DebtService } from 'src/app/services/debt/debt.service';
+import { ValidationErrorTypes } from 'src/app/validation-error-types';
 
 @Component({
   selector: 'app-add-debtor',

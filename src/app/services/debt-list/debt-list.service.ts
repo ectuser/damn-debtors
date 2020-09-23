@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { DebtService } from './debt.service';
-import { DatabaseDebt } from './models/databaseDebt';
-import { Debt } from './models/debt';
+import { DebtService } from '../../services/debt/debt.service';
+import { DatabaseDebt } from '../../models/databaseDebt';
+import { Debt } from '../../models/debt';
 
 @Injectable({
   providedIn: 'root',

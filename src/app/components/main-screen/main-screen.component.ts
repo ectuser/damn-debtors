@@ -1,7 +1,4 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { DebtService } from '../debt.service';
-import { DatabaseDebt } from '../models/databaseDebt';
-import { Debt } from '../models/debt';
 import {
   MatDialog,
   MatDialogRef,
@@ -13,6 +10,9 @@ import { CloseDialogStates } from '../debtor-dialog/closeDialogStates';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
+import { DebtService } from 'src/app/services/debt/debt.service';
+import { Debt } from 'src/app/models/debt';
+import { DatabaseDebt } from 'src/app/models/databaseDebt';
 
 @Component({
   selector: 'app-main-screen',

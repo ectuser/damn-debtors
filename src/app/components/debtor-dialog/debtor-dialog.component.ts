@@ -7,10 +7,10 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DebtService } from '../debt.service';
-import { Debt } from '../models/debt';
+import { Debt } from 'src/app/models/debt';
+import { DebtService } from 'src/app/services/debt/debt.service';
+import { ValidationErrorTypes } from 'src/app/validation-error-types';
 import { CloseDialogStates } from './closeDialogStates';
-import { ValidationErrorTypes } from '../validation-error-types';
 
 @Component({
   selector: 'app-debtor-dialog',

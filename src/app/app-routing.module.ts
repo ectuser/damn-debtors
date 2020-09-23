@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AddDebtComponent } from './add-debtor/add-debtor.component';
-import { MainScreenComponent } from './main-screen/main-screen.component';
-import { DebtComponent } from './debt/debt.component';
-import { SearchComponent } from './search/search.component';
-import { NotFoundComponent } from './not-found/not-found.component';
-import { SignInComponent } from './auth/sign-in/sign-in.component';
-import { SignUpComponent } from './auth/sign-up/sign-up.component';
-import { AuthGuard } from './auth/auth.guard';
+import { AddDebtComponent } from './components/add-debtor/add-debtor.component';
+import { MainScreenComponent } from './components/main-screen/main-screen.component';
+import { DebtComponent } from './components/debt/debt.component';
+import { SearchComponent } from './components/search/search.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
+import { AuthGuard } from './guards/auth.guard';
+import { SignInComponent } from './components/sign-in/sign-in.component';
+import { SignUpComponent } from './components/sign-up/sign-up.component';
 
 const routes: Routes = [
   {

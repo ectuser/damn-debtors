@@ -5,11 +5,11 @@ import {
   FormGroup,
   ValidationErrors,
 } from '@angular/forms';
-import { AuthService } from '../auth.service';
 import { Validators } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
 import { ValidationErrorTypes } from 'src/app/validation-error-types';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-sign-up',

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DebtService } from '../debt.service';
-import { Debt } from '../models/debt';
+import { Debt } from 'src/app/models/debt';
+import { DebtService } from 'src/app/services/debt/debt.service';
 
 @Component({
   selector: 'app-debt',

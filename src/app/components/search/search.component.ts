@@ -2,10 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Debt } from '../models/debt';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DatabaseDebt } from '../models/databaseDebt';
-import { DebtListService } from '../debt-list.service';
+import { Debt } from 'src/app/models/debt';
+import { DebtListService } from 'src/app/services/debt-list/debt-list.service';
 
 @Component({
   selector: 'app-search',

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { Debt } from './models/debt';
-import { DatabaseDebt } from './models/databaseDebt';
+import { Debt } from '../../models/debt';
+import { DatabaseDebt } from '../../models/databaseDebt';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs/internal/observable/of';
 
