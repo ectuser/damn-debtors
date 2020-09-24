@@ -9,7 +9,7 @@
         <mat-label>Email</mat-label>
         <input matInput formControlName="email" type="email" />
         <mat-error *ngIf="signInForm.get('email').invalid">{{
-          getEmailErrorMessage()
+          validationService.getFieldErrorMessage(signInForm, "email")
         }}</mat-error>
       </mat-form-field>
     </div>
@@ -18,7 +18,7 @@
         <mat-label>Password</mat-label>
         <input matInput formControlName="password" type="password" />
         <mat-error *ngIf="signInForm.get('password').invalid">{{
-          getPasswordErrorMessage()
+          validationService.getFieldErrorMessage(signInForm, "password")
         }}</mat-error>
       </mat-form-field>
     </div>

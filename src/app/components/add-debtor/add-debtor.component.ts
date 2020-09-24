@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DatabaseDebt } from 'src/app/models/databaseDebt';
 import { DebtService } from 'src/app/services/debt/debt.service';
+import { ValidationService } from 'src/app/services/validation/validation.service';
 import { ValidationErrorTypes } from 'src/app/validation-error-types';
 
 @Component({
@@ -16,7 +17,8 @@ export class AddDebtComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private debtorService: DebtService,
-    private router: Router
+    private router: Router,
+    public validationService: ValidationService
   ) {
     this.addDebtForm = this.formBuilder.group({
       debt: ['', Validators.required],
@@ -34,12 +36,5 @@ export class AddDebtComponent implements OnInit {
     this.debtorService.addDebt(debtObj).subscribe((debt: DatabaseDebt) => {
       this.router.navigate(['/debts']);
     });
-  }
-
-  getRequiredFieldErrorMessage(fieldName: string) {
-    const field = this.addDebtForm.get(fieldName);
-    return field.hasError('required')
-      ? ValidationErrorTypes.FIELD_REQUIRED
-      : '';
   }
 }

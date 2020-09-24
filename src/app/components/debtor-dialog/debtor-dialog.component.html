@@ -4,7 +4,7 @@
       <mat-label>Name</mat-label>
       <input matInput formControlName="name" />
       <mat-error *ngIf="addDebtForm.get('name').invalid">{{
-        getRequiredFieldErrorMessage("name")
+        validationService.getFieldErrorMessage(addDebtForm, "name")
       }}</mat-error>
     </mat-form-field>
   </div>
@@ -14,7 +14,7 @@
       <mat-label>Debt</mat-label>
       <input matInput formControlName="debt" type="number" />
       <mat-error *ngIf="addDebtForm.get('debt').invalid">{{
-        getRequiredFieldErrorMessage("debt")
+        validationService.getFieldErrorMessage(addDebtForm, "debt")
       }}</mat-error>
     </mat-form-field>
   </div>

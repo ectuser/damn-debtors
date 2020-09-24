@@ -9,6 +9,7 @@ import {
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Debt } from 'src/app/models/debt';
 import { DebtService } from 'src/app/services/debt/debt.service';
+import { ValidationService } from 'src/app/services/validation/validation.service';
 import { ValidationErrorTypes } from 'src/app/validation-error-types';
 import { CloseDialogStates } from './closeDialogStates';
 
@@ -22,7 +23,8 @@ export class DebtorDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<DebtorDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Debt,
-    private debtorService: DebtService
+    private debtorService: DebtService,
+    public validationService: ValidationService
   ) {
     this.addDebtForm = new FormGroup({
       debt: new FormControl(data.debt, Validators.required),
@@ -45,12 +47,5 @@ export class DebtorDialogComponent {
       console.log(val);
     });
     this.dialogRef.close(CloseDialogStates.Deleted);
-  }
-
-  getRequiredFieldErrorMessage(fieldName: string) {
-    const field = this.addDebtForm.get(fieldName);
-    return field.hasError('required')
-      ? ValidationErrorTypes.FIELD_REQUIRED
-      : '';
   }
 }
