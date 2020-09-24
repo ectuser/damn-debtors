@@ -4,6 +4,7 @@ import {
   FormControl,
   FormGroup,
   ValidationErrors,
+  AbstractFormGroupDirective,
 } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
@@ -11,45 +12,58 @@ import { ValidationErrorTypes } from 'src/app/validation-error-types';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { Router } from '@angular/router';
+import { ValidationService } from 'src/app/services/validation/validation.service';
+import { MinFieldLength, MinLength } from '../interfaces/min-field-length';
 
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.component.html',
   styleUrls: ['./sign-up.component.scss'],
 })
-export class SignUpComponent implements OnInit {
+export class SignUpComponent implements OnInit, MinFieldLength {
   signUpForm: FormGroup;
-  private passwordMinLength = 6;
+  public minFieldLength: MinLength = {};
 
   constructor(
     private authService: AuthService,
     private formBuilder: FormBuilder,
     private _snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    public validationService: ValidationService
   ) {}
-  matchValues(
-    matchTo: string // name of the control to match to
-  ): (AbstractControl) => ValidationErrors | null {
-    return (control: AbstractControl): ValidationErrors | null =>
-      !!control.parent &&
-      !!control.parent.value &&
-      control.value === control.parent.controls[matchTo].value
-        ? null
-        : { notMatching: true };
-  }
 
   ngOnInit(): void {
-    this.signUpForm = this.formBuilder.group({
-      email: ['', [Validators.email, Validators.required]],
-      password: [
-        '',
-        [Validators.required, Validators.minLength(this.passwordMinLength)],
-      ],
-      confirmedPassword: [
-        '',
-        [Validators.required, this.matchValues('password')],
-      ],
-    });
+    this.minFieldLength['password'] = 6;
+
+    this.signUpForm = this.formBuilder.group(
+      {
+        email: ['', [Validators.email, Validators.required]],
+        password: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(this.minFieldLength['password']),
+          ],
+        ],
+        confirmedPassword: ['', [Validators.required]],
+      },
+      { validators: this.matchValues('password', 'confirmedPassword') }
+    );
+  }
+
+  matchValues(
+    first: string,
+    second: string
+  ): (AbstractControl: FormGroup) => ValidationErrors | null {
+    return (formGroup: FormGroup): ValidationErrors | null => {
+      return (formGroup &&
+        formGroup.get(first) &&
+        formGroup.get(second) &&
+        formGroup.get(first).value === formGroup.get(second).value) ||
+        (formGroup.get(first).value && !formGroup.get(second).value)
+        ? null
+        : { valuesNotMatching: true };
+    };
   }
 
   onSubmit(formData) {
@@ -80,30 +94,5 @@ export class SignUpComponent implements OnInit {
           });
         }
       );
-  }
-
-  getEmailErrorMessage() {
-    const email = this.signUpForm.get('email');
-    return email.hasError('required')
-      ? ValidationErrorTypes.FIELD_REQUIRED
-      : email.hasError('email')
-      ? ValidationErrorTypes.INVALID_EMAIL
-      : '';
-  }
-  getPasswordErrorMessage() {
-    const password = this.signUpForm.get('password');
-    return password.hasError('required')
-      ? ValidationErrorTypes.FIELD_REQUIRED
-      : password.hasError('minlength')
-      ? ValidationErrorTypes.MIN_LENGTH(this.passwordMinLength)
-      : '';
-  }
-  getConfirmedPasswordErrorMessage() {
-    const confirmedPassword = this.signUpForm.get('confirmedPassword');
-    return confirmedPassword.hasError('required')
-      ? ValidationErrorTypes.FIELD_REQUIRED
-      : confirmedPassword.hasError('notMatching')
-      ? ValidationErrorTypes.PASSWORDS_DO_NOT_MATCH
-      : '';
   }
 }
