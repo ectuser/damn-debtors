@@ -1,18 +1,10 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import {
-  MatDialog,
-  MatDialogRef,
-  MAT_DIALOG_DATA,
-} from '@angular/material/dialog';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { DebtorDialogComponent } from '../debtor-dialog/debtor-dialog.component';
 import { CloseDialogStates } from '../debtor-dialog/closeDialogStates';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { HttpClient } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
-import { DebtService } from 'src/app/services/debt/debt.service';
 import { Debt } from 'src/app/models/debt';
-import { DatabaseDebt } from 'src/app/models/databaseDebt';
+import { DebtListService } from 'src/app/services/debt-list/debt-list.service';
 
 @Component({
   selector: 'app-main-screen',
@@ -21,10 +13,9 @@ import { DatabaseDebt } from 'src/app/models/databaseDebt';
 })
 export class MainScreenComponent implements OnInit {
   constructor(
-    private debtService: DebtService,
     public dialog: MatDialog,
-    private _snackBar: MatSnackBar,
-    private http: HttpClient
+    private snackBar: MatSnackBar,
+    private debtListService: DebtListService
   ) {}
 
   displayedColumns: string[] = ['name', 'debt', 'loanDate', 'paymentDate'];
@@ -46,30 +37,20 @@ export class MainScreenComponent implements OnInit {
         console.log(`The debt successfully ${result}`);
         this.openSnackBar(`The debt successfully ${result}`);
       }
-      this.getDebts();
+      this.debtListService.searchDebts();
     });
   }
 
   openSnackBar(message: string) {
-    this._snackBar.open(message, null, {
+    this.snackBar.open(message, null, {
       duration: 2000,
     });
   }
 
   ngOnInit(): void {
-    this.getDebts();
-  }
-
-  getDebts() {
-    this.debtService.getDebts().subscribe(
-      (debts) => {
-        console.log(debts);
-        this.dataSource = debts.map((debtor: DatabaseDebt) => {
-          let obj: Debt = this.debtService.transformDatabaseDebtToDebt(debtor);
-          return obj;
-        });
-      },
-      (err) => console.log(err)
-    );
+    this.debtListService.Debts.subscribe((debts) => {
+      this.dataSource = debts;
+    });
+    this.debtListService.searchDebts();
   }
 }

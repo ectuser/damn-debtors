@@ -1,14 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  ValidationErrors,
-  AbstractFormGroupDirective,
-} from '@angular/forms';
+import { FormGroup, ValidationErrors } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { FormBuilder } from '@angular/forms';
-import { ValidationErrorTypes } from 'src/app/validation-error-types';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { Router } from '@angular/router';
@@ -27,7 +20,7 @@ export class SignUpComponent implements OnInit, MinFieldLength {
   constructor(
     private authService: AuthService,
     private formBuilder: FormBuilder,
-    private _snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
     private router: Router,
     public validationService: ValidationService
   ) {}
@@ -89,7 +82,7 @@ export class SignUpComponent implements OnInit, MinFieldLength {
             err.error && err.error.message
               ? err.error.message
               : "There's some strange error...";
-          this._snackBar.open(errorMessage, null, {
+          this.snackBar.open(errorMessage, null, {
             duration: 2000,
           });
         }

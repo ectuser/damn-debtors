@@ -1,16 +1,9 @@
 import { Component, Inject } from '@angular/core';
-import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  ValidationErrors,
-  Validators,
-} from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Debt } from 'src/app/models/debt';
 import { DebtService } from 'src/app/services/debt/debt.service';
 import { ValidationService } from 'src/app/services/validation/validation.service';
-import { ValidationErrorTypes } from 'src/app/validation-error-types';
 import { CloseDialogStates } from './closeDialogStates';
 
 @Component({
@@ -19,10 +12,10 @@ import { CloseDialogStates } from './closeDialogStates';
   styleUrls: ['./debtor-dialog.component.scss'],
 })
 export class DebtorDialogComponent {
-  addDebtForm;
+  addDebtForm: FormGroup;
   constructor(
-    public dialogRef: MatDialogRef<DebtorDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Debt,
+    public dialogRef: MatDialogRef<DebtorDialogComponent>,
     private debtorService: DebtService,
     public validationService: ValidationService
   ) {
@@ -43,9 +36,8 @@ export class DebtorDialogComponent {
   }
 
   deleteDebt() {
-    this.debtorService.deleteDebt(this.data).subscribe((val) => {
-      console.log(val);
+    this.debtorService.deleteDebt(this.data).subscribe(() => {
+      this.dialogRef.close(CloseDialogStates.Deleted);
     });
-    this.dialogRef.close(CloseDialogStates.Deleted);
   }
 }

@@ -78,14 +78,13 @@ export class AuthService {
   }
 
   checkIsTokenValid() {
-    console.log('fucking options', this.httpOptions);
     return this.http
       .get(`${this.authUrl}/check-the-token`, this.httpOptions)
       .pipe(
         tap(() => {
           this.isLoggedIn = true;
         }),
-        catchError((err) => {
+        catchError(() => {
           this.isLoggedIn = false;
           return of(false);
         }),

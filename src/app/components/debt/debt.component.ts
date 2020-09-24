@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Debt } from 'src/app/models/debt';
 import { DebtService } from 'src/app/services/debt/debt.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-debt',
@@ -14,7 +15,8 @@ export class DebtComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private debtorsService: DebtService
+    private debtorsService: DebtService,
+    private _snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
@@ -24,11 +26,12 @@ export class DebtComponent implements OnInit {
       (debtDB) => {
         let debt = this.debtorsService.transformDatabaseDebtToDebt(debtDB);
         this.debt = debt;
-        console.log(debt);
       },
       (err) => {
-        console.log('Wrong path');
-        this.router.navigate(['/debtors']);
+        this._snackBar.open(err, null, {
+          duration: 2000,
+        });
+        this.router.navigate(['/debts']);
       }
     );
   }

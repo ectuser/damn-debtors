@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
-import { ValidationErrorTypes } from 'src/app/validation-error-types';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { ValidationService } from 'src/app/services/validation/validation.service';

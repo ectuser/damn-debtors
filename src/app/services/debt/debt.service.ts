@@ -4,7 +4,6 @@ import { Observable, throwError } from 'rxjs';
 import { Debt } from '../../models/debt';
 import { DatabaseDebt } from '../../models/databaseDebt';
 import { catchError } from 'rxjs/operators';
-import { of } from 'rxjs/internal/observable/of';
 
 @Injectable({
   providedIn: 'root',
@@ -21,7 +20,6 @@ export class DebtService {
 
   getDebts(): Observable<DatabaseDebt[]> {
     const data = this.http.get<DatabaseDebt[]>(this.debtsUrl, this.httpOptions);
-    console.log(data);
     return data.pipe(
       catchError(() => {
         return throwError("Can't find debts");
@@ -40,14 +38,12 @@ export class DebtService {
 
   updateDebt(debt: Debt): Observable<any> {
     let databaseDebt = this.transformDebtToDatabaseDebt(debt);
-    console.log(databaseDebt);
     const url = `${this.debtsUrl}/${databaseDebt.id}`;
     return this.http.put(url, databaseDebt, this.httpOptions);
   }
 
   deleteDebt(debt: Debt): Observable<DatabaseDebt> {
     let databaseDebt: DatabaseDebt = this.transformDebtToDatabaseDebt(debt);
-    console.log('delete ', databaseDebt);
     const url = `${this.debtsUrl}/${databaseDebt.id}`;
     return this.http.delete<DatabaseDebt>(url, this.httpOptions);
   }
