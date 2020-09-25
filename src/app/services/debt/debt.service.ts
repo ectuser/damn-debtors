@@ -28,9 +28,9 @@ export class DebtService {
   }
 
   addDebt(debt: DebtInstance): Observable<Debt> {
-    console.log(debt.toJSON());
+    console.log(debt);
 
-    return this.http.post<Debt>(this.debtsUrl, debt.toJSON(), this.httpOptions);
+    return this.http.post<Debt>(this.debtsUrl, debt, this.httpOptions);
   }
 
   updateDebt(debt: DebtInstance): Observable<any> {

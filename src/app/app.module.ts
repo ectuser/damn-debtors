@@ -70,7 +70,7 @@ import { SignUpComponent } from './components/sign-up/sign-up.component';
   providers: [
     MatDatepickerModule,
     MatNativeDateModule,
-    httpInterceptorProviders,
+    ...httpInterceptorProviders,
   ],
   bootstrap: [AppComponent],
 })

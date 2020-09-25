@@ -27,8 +27,8 @@ export class AddDebtComponent {
     });
   }
 
-  onSubmit(debtData: DebtInstance) {
-    const debt = new DebtInstance({ ...debtData });
+  onSubmit() {
+    const debt = new DebtInstance(this.addDebtForm.value);
     this.debtService.addDebt(debt).subscribe(
       () => {
         this.router.navigate(['/debts']);

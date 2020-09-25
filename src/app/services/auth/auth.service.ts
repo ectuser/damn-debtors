@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, of, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
 interface SignInResult {
@@ -23,9 +23,16 @@ export class AuthService {
       'Content-Type': 'application/json',
     }),
   };
-  public isLoggedIn = false;
+
+  token = this.getAuthorizationToken();
+
+  // public isLoggedIn = false;
+  get isLoggedIn(): Observable<boolean> {
+    return this.isLoggedIn$.asObservable();
+  }
   public redirectUrl: string;
 
+  private isLoggedIn$ = new BehaviorSubject<boolean>(!!this.token);
   constructor(private http: HttpClient, private router: Router) {}
 
   signIn(credentials) {
@@ -38,10 +45,12 @@ export class AuthService {
       )
       .pipe(
         tap(() => {
-          this.isLoggedIn = true;
+          // this.isLoggedIn = true;
+          this.isLoggedIn$.next(true);
         }),
         catchError((err) => {
-          this.isLoggedIn = false;
+          // this.isLoggedIn = false;
+          this.isLoggedIn$.next(false);
           return throwError(err);
         }),
         tap((value) => {
@@ -70,7 +79,8 @@ export class AuthService {
   }
 
   signOut() {
-    this.isLoggedIn = false;
+    // this.isLoggedIn = false;
+    this.isLoggedIn$.next(false);
     this.setAuthorizationToken('');
     return new Observable((subscriber) => {
       subscriber.next({ message: 'success' });
@@ -78,17 +88,23 @@ export class AuthService {
   }
 
   checkIsTokenValid() {
+    console.log('check me');
+
     return this.http
       .get(`${this.authUrl}/check-the-token`, this.httpOptions)
       .pipe(
         tap(() => {
-          this.isLoggedIn = true;
+          // this.isLoggedIn = true;
+          console.log('check me');
+          this.isLoggedIn$.next(true);
         }),
         catchError(() => {
-          this.isLoggedIn = false;
+          // this.isLoggedIn = false;
+          console.log('check me');
+          this.isLoggedIn$.next(false);
           return of(false);
         }),
-        map(() => this.isLoggedIn)
+        map(() => true)
       );
   }
 

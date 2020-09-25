@@ -10,26 +10,22 @@ import { SignInComponent } from './components/sign-in/sign-in.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 
 const routes: Routes = [
+  { path: 'add', component: AddDebtComponent, canActivate: [AuthGuard] },
   {
-    path: '',
+    path: 'debts',
+    component: MainScreenComponent,
     canActivate: [AuthGuard],
-    children: [
-      {
-        path: '',
-        redirectTo: '/debts',
-        pathMatch: 'full',
-      },
-      { path: 'add', component: AddDebtComponent },
-      {
-        path: 'debts',
-        component: MainScreenComponent,
-      },
-      { path: 'debts/:id', component: DebtComponent },
-      { path: 'search', component: SearchComponent },
-    ],
   },
+  { path: 'debts/:id', component: DebtComponent, canActivate: [AuthGuard] },
+  { path: 'search', component: SearchComponent, canActivate: [AuthGuard] },
+
   { path: 'sign-in', component: SignInComponent },
   { path: 'sign-up', component: SignUpComponent },
+  {
+    path: '',
+    redirectTo: '/debts',
+    pathMatch: 'full',
+  },
   { path: '**', component: NotFoundComponent },
 ];
 
