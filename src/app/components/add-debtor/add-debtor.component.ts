@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { DatabaseDebt } from 'src/app/models/databaseDebt';
+import { Debt, DebtInstance } from 'src/app/models/debt';
 import { DebtService } from 'src/app/services/debt/debt.service';
 import { ValidationService } from 'src/app/services/validation/validation.service';
 
@@ -15,7 +15,7 @@ export class AddDebtComponent {
 
   constructor(
     private formBuilder: FormBuilder,
-    private debtorService: DebtService,
+    private debtService: DebtService,
     private router: Router,
     public validationService: ValidationService
   ) {
@@ -27,11 +27,15 @@ export class AddDebtComponent {
     });
   }
 
-  onSubmit(debtData) {
-    let debtObj = { ...debtData };
-    console.log(debtObj);
-    this.debtorService.addDebt(debtObj).subscribe((debt: DatabaseDebt) => {
-      this.router.navigate(['/debts']);
-    });
+  onSubmit(debtData: DebtInstance) {
+    const debt = new DebtInstance({ ...debtData });
+    this.debtService.addDebt(debt).subscribe(
+      () => {
+        this.router.navigate(['/debts']);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 }

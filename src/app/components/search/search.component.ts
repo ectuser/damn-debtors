@@ -3,7 +3,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Debt } from 'src/app/models/debt';
+import { DebtInstance } from 'src/app/models/debt';
 import { DebtListService } from 'src/app/services/debt-list/debt-list.service';
 
 @Component({
@@ -13,7 +13,7 @@ import { DebtListService } from 'src/app/services/debt-list/debt-list.service';
 })
 export class SearchComponent implements OnInit, OnDestroy {
   formGroup: FormGroup;
-  shownDebts: Debt[];
+  shownDebts: DebtInstance[];
 
   private unsubscribe = new Subject();
 

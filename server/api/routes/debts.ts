@@ -1,7 +1,7 @@
 import { generateId } from '../../services/securityService';
-import { DatabaseDebt } from '../../../src/app/models/databaseDebt';
 import passport from '../../passport';
 import { debtsDb, usersDb } from '../../db/dbConnection';
+import { Debt } from '../../../src/app/models/debt';
 
 const express = require('express');
 const debtsRouter = express.Router();
@@ -58,7 +58,7 @@ debtsRouter.post(
     }
     const id = generateId();
     const userId = req.user.id;
-    const debt: DatabaseDebt = { ...req.body, id, userId };
+    const debt: Debt = { ...req.body, id, userId };
     const inderted = await debtsDb.insert({ ...debt });
     const addedDebt = await debtsDb.findOne({ _id: inderted._id });
     if (!addedDebt) {

@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DebtorDialogComponent } from '../debtor-dialog/debtor-dialog.component';
 import { CloseDialogStates } from '../debtor-dialog/closeDialogStates';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Debt } from 'src/app/models/debt';
+import { Debt, DebtInstance } from 'src/app/models/debt';
 import { DebtListService } from 'src/app/services/debt-list/debt-list.service';
 
 @Component({
@@ -20,12 +20,12 @@ export class MainScreenComponent implements OnInit {
 
   displayedColumns: string[] = ['name', 'debt', 'loanDate', 'paymentDate'];
 
-  dataSource: Debt[] = [];
+  dataSource: DebtInstance[] = [];
 
-  openDialog(debtor: Debt) {
+  openDialog(debt: DebtInstance) {
     const dialogRef = this.dialog.open(DebtorDialogComponent, {
       width: '300px',
-      data: { ...debtor },
+      data: { ...debt },
     });
 
     dialogRef.afterClosed().subscribe((result) => {

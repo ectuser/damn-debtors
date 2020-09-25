@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Debt } from 'src/app/models/debt';
+import { Debt, DebtInstance } from 'src/app/models/debt';
 import { DebtService } from 'src/app/services/debt/debt.service';
 import { ValidationService } from 'src/app/services/validation/validation.service';
 import { CloseDialogStates } from './closeDialogStates';
@@ -14,7 +14,7 @@ import { CloseDialogStates } from './closeDialogStates';
 export class DebtorDialogComponent {
   addDebtForm: FormGroup;
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: Debt,
+    @Inject(MAT_DIALOG_DATA) public data: DebtInstance,
     public dialogRef: MatDialogRef<DebtorDialogComponent>,
     private debtorService: DebtService,
     public validationService: ValidationService
@@ -27,9 +27,12 @@ export class DebtorDialogComponent {
     });
   }
 
-  onSubmit(formValues: Debt): void {
+  onSubmit(formValues): void {
     console.log(formValues);
-    let newDebtObject: Debt = { id: this.data.id, ...formValues };
+    const newDebtObject: DebtInstance = new DebtInstance({
+      id: this.data.id,
+      ...formValues,
+    });
     this.debtorService.updateDebt(newDebtObject).subscribe(() => {
       this.dialogRef.close(CloseDialogStates.Updated);
     });

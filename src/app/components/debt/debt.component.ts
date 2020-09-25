@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Debt } from 'src/app/models/debt';
+import { DebtInstance } from 'src/app/models/debt';
 import { DebtService } from 'src/app/services/debt/debt.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -11,7 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class DebtComponent implements OnInit {
   private id: string;
-  debt: Debt;
+  debt: DebtInstance;
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
@@ -23,8 +23,7 @@ export class DebtComponent implements OnInit {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
 
     this.debtorsService.findDebtById(this.id).subscribe(
-      (debtDB) => {
-        let debt = this.debtorsService.transformDatabaseDebtToDebt(debtDB);
+      (debt: DebtInstance) => {
         this.debt = debt;
       },
       (err) => {

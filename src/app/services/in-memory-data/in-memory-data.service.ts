@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { InMemoryDbService } from 'angular-in-memory-web-api';
-import { DatabaseDebt } from '../../models/databaseDebt';
+import { Debt } from 'src/app/models/debt';
 
 @Injectable({
   providedIn: 'root',
 })
 export class InMemoryDataService implements InMemoryDbService {
   createDb() {
-    const debts1: DatabaseDebt[] = [
+    const debts1: Debt[] = [
       {
         id: '1',
         name: 'Alex',

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { Debt } from '../../models/debt';
-import { DatabaseDebt } from '../../models/databaseDebt';
+import { Debt, DebtInstance } from '../../models/debt';
 import { catchError } from 'rxjs/operators';
 
 @Injectable({
@@ -18,8 +17,8 @@ export class DebtService {
 
   constructor(private http: HttpClient) {}
 
-  getDebts(): Observable<DatabaseDebt[]> {
-    const data = this.http.get<DatabaseDebt[]>(this.debtsUrl, this.httpOptions);
+  getDebts(): Observable<DebtInstance[]> {
+    const data = this.http.get<DebtInstance[]>(this.debtsUrl, this.httpOptions);
     return data.pipe(
       catchError(() => {
         return throwError("Can't find debts");
@@ -27,66 +26,33 @@ export class DebtService {
     );
   }
 
-  addDebt(debt: Debt): Observable<DatabaseDebt> {
-    let databaseDebtor: DatabaseDebt = this.transformDebtToDatabaseDebt(debt);
-    return this.http.post<DatabaseDebt>(
-      this.debtsUrl,
-      databaseDebtor,
-      this.httpOptions
-    );
+  addDebt(debt: DebtInstance): Observable<Debt> {
+    console.log(debt.toJSON());
+
+    return this.http.post<Debt>(this.debtsUrl, debt.toJSON(), this.httpOptions);
   }
 
-  updateDebt(debt: Debt): Observable<any> {
-    let databaseDebt = this.transformDebtToDatabaseDebt(debt);
+  updateDebt(debt: DebtInstance): Observable<any> {
+    const dbDebt = debt.toJSON();
+    const url = `${this.debtsUrl}/${dbDebt.id}`;
+    return this.http.put(url, dbDebt, this.httpOptions);
+  }
+
+  deleteDebt(debt: DebtInstance): Observable<Debt> {
+    let databaseDebt: Debt = debt.toJSON();
     const url = `${this.debtsUrl}/${databaseDebt.id}`;
-    return this.http.put(url, databaseDebt, this.httpOptions);
+    return this.http.delete<Debt>(url, this.httpOptions);
   }
 
-  deleteDebt(debt: Debt): Observable<DatabaseDebt> {
-    let databaseDebt: DatabaseDebt = this.transformDebtToDatabaseDebt(debt);
-    const url = `${this.debtsUrl}/${databaseDebt.id}`;
-    return this.http.delete<DatabaseDebt>(url, this.httpOptions);
-  }
-
-  findDebtById(id: string): Observable<DatabaseDebt> {
+  findDebtById(id: string): Observable<DebtInstance> {
     const url = `${this.debtsUrl}/${id}`;
     return this.http
-      .get<DatabaseDebt>(url)
+      .get<DebtInstance>(url)
       .pipe(catchError(() => throwError("Can't find debt")));
   }
 
-  findDebtsByName(name: string): Observable<DatabaseDebt[]> {
+  findDebtsByName(name: string): Observable<DebtInstance[]> {
     const requestUrl = `api/search?searchData=${name}`;
-    return this.http.get<DatabaseDebt[]>(requestUrl);
-  }
-
-  public transformDebtToDatabaseDebt(debt: Debt): DatabaseDebt {
-    let databaseDebtor: DatabaseDebt = {
-      id: debt.id,
-      name: debt.name,
-      debt: debt.debt,
-    };
-    databaseDebtor.paymentDate = debt.paymentDate
-      ? debt.paymentDate.toDateString()
-      : null;
-    databaseDebtor.loanDate = debt.loanDate
-      ? debt.loanDate.toDateString()
-      : null;
-    return databaseDebtor;
-  }
-
-  public transformDatabaseDebtToDebt(databaseDebt: DatabaseDebt): Debt {
-    let debt: Debt = {
-      name: databaseDebt.name,
-      debt: databaseDebt.debt,
-      id: databaseDebt.id,
-    };
-    debt.loanDate = databaseDebt.loanDate
-      ? new Date(databaseDebt.loanDate)
-      : null;
-    debt.paymentDate = databaseDebt.paymentDate
-      ? new Date(databaseDebt.paymentDate)
-      : null;
-    return debt;
+    return this.http.get<DebtInstance[]>(requestUrl);
   }
 }

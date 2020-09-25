@@ -1,29 +1,41 @@
 <div>
   <table class="debtors-list" mat-table [dataSource]="dataSource">
     <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row class="debtor-row" *matRowDef="let row; columns: displayedColumns;" (click)="openDialog(row)"></mat-row>
+    <mat-row
+      class="debtor-row"
+      *matRowDef="let row; columns: displayedColumns"
+      (click)="openDialog(row)"
+    ></mat-row>
     <ng-container matColumnDef="name">
       <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.name}} <span style="display: none;">{{element.id}}</span> </mat-cell>
+      <mat-cell *matCellDef="let element">
+        {{ element.name }} <span style="display: none">{{ element.id }}</span>
+      </mat-cell>
     </ng-container>
-  
+
     <ng-container matColumnDef="debt">
-      <mat-header-cell  *matHeaderCellDef> Debt </mat-header-cell>
-      <mat-cell  *matCellDef="let element"> {{element.debt}} </mat-cell>
+      <mat-header-cell *matHeaderCellDef> Debt </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{ element.debt }} </mat-cell>
     </ng-container>
-  
+
     <ng-container matColumnDef="loanDate">
-      <mat-header-cell  *matHeaderCellDef> Loan Date </mat-header-cell>
-      <mat-cell  *matCellDef="let element"> {{element.loanDate?.toDateString()}} </mat-cell>
+      <mat-header-cell *matHeaderCellDef> Loan Date </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{ element.loanDate }} </mat-cell>
     </ng-container>
-  
+
     <ng-container matColumnDef="paymentDate">
-      <mat-header-cell  *matHeaderCellDef> Payment Date </mat-header-cell>
-      <mat-cell  *matCellDef="let element"> {{element.paymentDate?.toDateString()}} </mat-cell>
+      <mat-header-cell *matHeaderCellDef> Payment Date </mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{ element.paymentDate }} </mat-cell>
     </ng-container>
   </table>
 </div>
 
-<button routerLink="/add" class="add-debt-fab" mat-fab color="accent" aria-label="Example icon button with a bookmark icon">
-    <mat-icon>add</mat-icon>
+<button
+  routerLink="/add"
+  class="add-debt-fab"
+  mat-fab
+  color="accent"
+  aria-label="Example icon button with a bookmark icon"
+>
+  <mat-icon>add</mat-icon>
 </button>
