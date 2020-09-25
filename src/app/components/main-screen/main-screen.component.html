@@ -20,12 +20,16 @@
 
     <ng-container matColumnDef="loanDate">
       <mat-header-cell *matHeaderCellDef> Loan Date </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{ element.loanDate }} </mat-cell>
+      <mat-cell *matCellDef="let element">
+        {{ element.loanDate?.toDateString() }}
+      </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="paymentDate">
       <mat-header-cell *matHeaderCellDef> Payment Date </mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{ element.paymentDate }} </mat-cell>
+      <mat-cell *matCellDef="let element">
+        {{ element.paymentDate?.toDateString() }}
+      </mat-cell>
     </ng-container>
   </table>
 </div>

@@ -49,6 +49,7 @@ export class MainScreenComponent implements OnInit {
 
   ngOnInit(): void {
     this.debtListService.Debts.subscribe((debts) => {
+      console.log(debts);
       this.dataSource = debts;
     });
     this.debtListService.searchDebts();

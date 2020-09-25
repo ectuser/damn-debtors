@@ -20,13 +20,7 @@ export class DebtInstance implements Debt {
   constructor(private source: Partial<Debt>) {}
 
   toJSON(): Debt {
-    const obj = {
-      ...this,
-      loanDate: this.loanDate ? this.loanDate.toDateString() : null,
-      paymentDate: this.paymentDate ? this.paymentDate.toDateString() : null,
-    };
-    console.log(obj);
-
-    return obj;
+    const { source, ...rest } = this;
+    return { ...rest };
   }
 }

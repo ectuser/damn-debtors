@@ -10,6 +10,17 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 exports.__esModule = true;
 exports.DebtInstance = void 0;
 var DebtInstance = /** @class */ (function () {
@@ -25,9 +36,8 @@ var DebtInstance = /** @class */ (function () {
             : null;
     }
     DebtInstance.prototype.toJSON = function () {
-        var obj = __assign(__assign({}, this), { loanDate: this.loanDate ? this.loanDate.toDateString() : null, paymentDate: this.paymentDate ? this.paymentDate.toDateString() : null });
-        console.log(obj);
-        return obj;
+        var _a = this, source = _a.source, rest = __rest(_a, ["source"]);
+        return __assign({}, rest);
     };
     return DebtInstance;
 }());

@@ -39,7 +39,8 @@ export class DebtorDialogComponent {
   }
 
   deleteDebt() {
-    this.debtorService.deleteDebt(this.data).subscribe(() => {
+    const debt: DebtInstance = new DebtInstance({ ...this.data });
+    this.debtorService.deleteDebt(debt).subscribe(() => {
       this.dialogRef.close(CloseDialogStates.Deleted);
     });
   }
