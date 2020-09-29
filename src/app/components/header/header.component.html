@@ -2,16 +2,19 @@
   <mat-toolbar-row>
     <span routerLink="/" style="cursor: pointer">DAMN DEBTORS</span>
     <span class="example-spacer"></span>
+    <button *ngIf="isLoggedIn" mat-icon-button routerLink="/profile">
+      <mat-icon>person_outline</mat-icon>
+    </button>
+    <button *ngIf="isLoggedIn" mat-icon-button routerLink="/search">
+      <mat-icon>search</mat-icon>
+    </button>
     <button
-      *ngIf="isShowingSignOut"
+      *ngIf="isLoggedIn"
       mat-flat-button
       color="primary"
       (click)="signOut()"
     >
       Sign Out
-    </button>
-    <button mat-icon-button routerLink="/search">
-      <mat-icon>search</mat-icon>
     </button>
   </mat-toolbar-row>
 </mat-toolbar>

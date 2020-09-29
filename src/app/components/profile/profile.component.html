@@ -1,10 +1,34 @@
 <mat-card class="profile-card">
   <h2>Profile info</h2>
-  <p>Number of active debts:</p>
-  <p>How much you will get:</p>
+  <p>
+    Number of active debts:
+    <span *ngIf="shownData">{{ shownData.numberOfDebts }}</span>
+  </p>
+  <p>
+    How much you will get:
+    <span *ngIf="shownData">{{ shownData.amountOfMoney }}</span>
+  </p>
 </mat-card>
 <mat-card class="profile-card">
   <h2>Security info</h2>
-  <p>Email:</p>
-  <p>Password:●●●●●●●</p>
+  <p>
+    Email: <span *ngIf="shownData">{{ shownData.email }}</span>
+    <button
+      mat-icon-button
+      aria-label="Example icon button with a open in new tab icon"
+      color="accent"
+    >
+      <mat-icon>edit</mat-icon>
+    </button>
+  </p>
+  <p>
+    Password: ●●●●●●●
+    <button
+      mat-icon-button
+      color="accent"
+      aria-label="Example icon button with a open in new tab icon"
+    >
+      <mat-icon>edit</mat-icon>
+    </button>
+  </p>
 </mat-card>

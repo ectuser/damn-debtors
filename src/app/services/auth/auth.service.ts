@@ -1,6 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 
@@ -33,7 +32,7 @@ export class AuthService {
   public redirectUrl: string;
 
   private isLoggedIn$ = new BehaviorSubject<boolean>(!!this.token);
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(private http: HttpClient) {}
 
   signIn(credentials) {
     // do the weird stuff to get the user

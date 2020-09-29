@@ -32,7 +32,6 @@ usersRouter.get(
       return;
     }
     const userId = req.user.id;
-    console.log(req.user);
 
     const dbUser = await usersDb.findOne({ id: userId });
     if (!dbUser) {
