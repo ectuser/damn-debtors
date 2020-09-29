@@ -42,25 +42,50 @@ var bodyParser = require('body-parser');
 var jwt = require('jsonwebtoken');
 var dbConnection_1 = require("../../db/dbConnection");
 var passport_1 = require("../../passport");
-usersRouter.get('/:id', passport_1["default"].authenticate('jwt', { session: false }), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var debtId, user;
+// usersRouter.get(
+//   '/:userId',
+//   passport.authenticate('jwt', { session: false }),
+//   async (req, res) => {
+//     const debtuserId = req.params.userId;
+//     if (!debtuserId) {
+//       res.status(400).json({ message: 'Bad Request' });
+//       return;
+//     }
+//     const user = await usersDb.findOne({ userId: debtuserId });
+//     if (user) {
+//       res.json(user);
+//     } else {
+//       res.status(404).json({ message: "Can't find the user" });
+//     }
+//   }
+// );
+usersRouter.get('/profile', passport_1["default"].authenticate('jwt', { session: false }), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var userId, dbUser, userDebts, amountOfMoney, obj;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                debtId = req.params.id;
-                if (!debtId) {
-                    res.status(400).json({ message: 'Bad Request' });
+                if (!req.user || !req.user.userId) {
+                    res.status(404).json({ message: "Can't find user" });
                     return [2 /*return*/];
                 }
-                return [4 /*yield*/, dbConnection_1.usersDb.findOne({ id: debtId })];
+                userId = req.user.userId;
+                return [4 /*yield*/, dbConnection_1.usersDb.findOne({ userId: userId })];
             case 1:
-                user = _a.sent();
-                if (user) {
-                    res.json(user);
+                dbUser = _a.sent();
+                if (!dbUser) {
+                    res.status(404).json({ message: 'User not found' });
+                    return [2 /*return*/];
                 }
-                else {
-                    res.status(404).json({ message: "Can't find the user" });
-                }
+                return [4 /*yield*/, dbConnection_1.usersDb.find({ userId: userId })];
+            case 2:
+                userDebts = _a.sent();
+                amountOfMoney = userDebts.reduce(function (sum, el) { return sum + el['debt']; });
+                obj = {
+                    email: dbUser.email,
+                    numberOfDebts: userDebts.length,
+                    amountOfMoney: amountOfMoney
+                };
+                res.json(obj);
                 return [2 /*return*/];
         }
     });
