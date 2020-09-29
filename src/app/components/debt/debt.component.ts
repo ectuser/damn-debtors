@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DebtInstance } from 'src/app/models/debt';
-import { DebtService } from 'src/app/services/debt/debt.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DebtListService } from 'src/app/services/debt-list/debt-list.service';
 
 @Component({
   selector: 'app-debt',
@@ -15,19 +15,18 @@ export class DebtComponent implements OnInit {
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
-    private debtorsService: DebtService,
-    private _snackBar: MatSnackBar
+    private debtListService: DebtListService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
     this.id = this.activatedRoute.snapshot.paramMap.get('id');
-
-    this.debtorsService.findDebtById(this.id).subscribe(
-      (debt: DebtInstance) => {
+    this.debtListService.getDebtById(this.id).subscribe(
+      (debt) => {
         this.debt = debt;
       },
       (err) => {
-        this._snackBar.open(err, null, {
+        this.snackBar.open(err, null, {
           duration: 2000,
         });
         this.router.navigate(['/debts']);

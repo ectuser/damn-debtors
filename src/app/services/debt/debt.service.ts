@@ -17,10 +17,9 @@ export class DebtService {
 
   constructor(private http: HttpClient) {}
 
-  getDebts(): Observable<DebtInstance[]> {
+  getDebts(): Observable<Debt[]> {
     const data = this.http.get<Debt[]>(this.debtsUrl, this.httpOptions);
     return data.pipe(
-      map((debts) => debts.map((debt) => new DebtInstance({ ...debt }))),
       catchError(() => {
         return throwError("Can't find debts");
       })
@@ -45,18 +44,15 @@ export class DebtService {
     return this.http.delete<Debt>(url, this.httpOptions);
   }
 
-  findDebtById(id: string): Observable<DebtInstance> {
+  findDebtById(id: string): Observable<Debt> {
     const url = `${this.debtsUrl}/${id}`;
-    return this.http.get<Debt>(url).pipe(
-      map((debt) => new DebtInstance({ ...debt })),
-      catchError(() => throwError("Can't find debt"))
-    );
+    return this.http
+      .get<Debt>(url)
+      .pipe(catchError(() => throwError("Can't find debt")));
   }
 
-  findDebtsByName(name: string): Observable<DebtInstance[]> {
+  findDebtsByName(name: string): Observable<Debt[]> {
     const requestUrl = `api/search?searchData=${name}`;
-    return this.http
-      .get<Debt[]>(requestUrl)
-      .pipe(map((debts) => debts.map((debt) => new DebtInstance({ ...debt }))));
+    return this.http.get<Debt[]>(requestUrl);
   }
 }

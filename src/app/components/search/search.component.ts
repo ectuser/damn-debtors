@@ -32,17 +32,20 @@ export class SearchComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(({ searchData }) => {
         console.log(searchData);
-        this.debtListService.searchDebts(searchData);
         if (searchData) {
           this.formGroup.patchValue({
             control: decodeURIComponent(searchData),
           });
         }
+        this.debtListService.searchDebts(searchData).subscribe(
+          (debts) => {
+            this.shownDebts = debts;
+          },
+          (err) => {
+            console.log('Something went wrong', err);
+          }
+        );
       });
-
-    this.debtListService.Debts.subscribe((value) => {
-      this.shownDebts = value;
-    });
   }
 
   ngOnDestroy() {

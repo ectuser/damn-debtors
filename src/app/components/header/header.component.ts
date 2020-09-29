@@ -10,13 +10,30 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 export class HeaderComponent implements OnInit {
   public isShowing: boolean;
   constructor(public authService: AuthService, private router: Router) {
-    this.authService.checkIsTokenValid().subscribe();
+    this.authService.checkIsTokenValid().subscribe(
+      (value) => {
+        if (!value) {
+          this.router.navigate(['/sign-in']);
+        }
+      },
+      (err) => {
+        this.router.navigate(['/sign-in']);
+      }
+    );
   }
 
   ngOnInit() {
-    this.authService.isLoggedIn.subscribe((value) => {
-      this.isShowing = value;
-    });
+    this.authService.isLoggedIn.subscribe(
+      (value) => {
+        this.isShowing = value;
+        if (!value) {
+          this.router.navigate(['/sign-in']);
+        }
+      },
+      (err) => {
+        this.router.navigate(['/sign-in']);
+      }
+    );
   }
 
   signOut() {
