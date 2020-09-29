@@ -31,6 +31,7 @@ import { httpInterceptorProviders } from './http-interceptors';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
+import { ProfileComponent } from './components/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { SignUpComponent } from './components/sign-up/sign-up.component';
     NotFoundComponent,
     SignInComponent,
     SignUpComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,

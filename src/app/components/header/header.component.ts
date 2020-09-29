@@ -8,7 +8,7 @@ import { AuthService } from 'src/app/services/auth/auth.service';
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
-  public isShowing: boolean;
+  public isShowingSignOut: boolean;
   constructor(public authService: AuthService, private router: Router) {
     this.authService.checkIsTokenValid().subscribe(
       (value) => {
@@ -25,7 +25,7 @@ export class HeaderComponent implements OnInit {
   ngOnInit() {
     this.authService.isLoggedIn.subscribe(
       (value) => {
-        this.isShowing = value;
+        this.isShowingSignOut = value;
         if (!value) {
           this.router.navigate(['/sign-in']);
         }
