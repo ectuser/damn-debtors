@@ -54,7 +54,7 @@ export class AuthService {
           return throwError(err);
         }),
         tap((value) => {
-          if (this.isLoggedIn) {
+          if (value && value.token && value.success) {
             this.setAuthorizationToken(value.token);
           }
         })

@@ -64,22 +64,23 @@ usersRouter.get('/profile', passport_1["default"].authenticate('jwt', { session:
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                if (!req.user || !req.user.userId) {
+                if (!req.user || !req.user.id) {
                     res.status(404).json({ message: "Can't find user" });
                     return [2 /*return*/];
                 }
-                userId = req.user.userId;
-                return [4 /*yield*/, dbConnection_1.usersDb.findOne({ userId: userId })];
+                userId = req.user.id;
+                console.log(req.user);
+                return [4 /*yield*/, dbConnection_1.usersDb.findOne({ id: userId })];
             case 1:
                 dbUser = _a.sent();
                 if (!dbUser) {
                     res.status(404).json({ message: 'User not found' });
                     return [2 /*return*/];
                 }
-                return [4 /*yield*/, dbConnection_1.usersDb.find({ userId: userId })];
+                return [4 /*yield*/, dbConnection_1.debtsDb.find({ userId: userId })];
             case 2:
                 userDebts = _a.sent();
-                amountOfMoney = userDebts.reduce(function (sum, el) { return sum + el['debt']; });
+                amountOfMoney = userDebts.reduce(function (sum, el) { return sum + el.debt; }, 0);
                 obj = {
                     email: dbUser.email,
                     numberOfDebts: userDebts.length,

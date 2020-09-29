@@ -27,21 +27,20 @@ usersRouter.get(
   '/profile',
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
-    if (!req.user || !req.user.userId) {
+    if (!req.user || !req.user.id) {
       res.status(404).json({ message: "Can't find user" });
       return;
     }
-    const userId = req.user.userId;
+    const userId = req.user.id;
+    console.log(req.user);
 
-    const dbUser = await usersDb.findOne({ userId });
+    const dbUser = await usersDb.findOne({ id: userId });
     if (!dbUser) {
       res.status(404).json({ message: 'User not found' });
       return;
     }
-    const userDebts = await usersDb.find({ userId });
-    const amountOfMoney = userDebts.reduce(
-      (sum: number, el) => sum + el['debt']
-    );
+    const userDebts = await debtsDb.find({ userId });
+    const amountOfMoney = userDebts.reduce((sum, el) => sum + el.debt, 0);
     const obj: GetUserProfile = {
       email: dbUser.email,
       numberOfDebts: userDebts.length,
