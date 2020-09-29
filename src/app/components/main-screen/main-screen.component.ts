@@ -37,7 +37,7 @@ export class MainScreenComponent implements OnInit {
         console.log(`The debt successfully ${result}`);
         this.openSnackBar(`The debt successfully ${result}`);
       }
-      this.debtListService.searchDebts();
+      this.getDebts();
     });
   }
 
@@ -48,6 +48,10 @@ export class MainScreenComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getDebts();
+  }
+
+  getDebts() {
     this.debtListService.getDebts().subscribe(
       (debts) => {
         this.dataSource = debts;
