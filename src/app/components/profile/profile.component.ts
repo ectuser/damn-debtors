@@ -4,6 +4,12 @@ import { GetUserProfile } from 'src/app/interfaces/server-interfaces/get-user-pr
 import { UserProfileService } from 'src/app/services/user-profile/user-profile.service';
 import { ChangeField } from './change-field';
 import { ChangeUserDataDialogComponent } from './change-user-data-dialog/change-user-data-dialog.component';
+import { ChangeProfileData } from './dialog-interfaces/change-profile-info';
+import {
+  ActionWith,
+  CloseDialog,
+  CloseDialogResult,
+} from './dialog-interfaces/close-dialog-result';
 
 @Component({
   selector: 'app-profile',
@@ -28,11 +34,24 @@ export class ProfileComponent implements OnInit {
   }
 
   changeData(fieldToChange: ChangeField) {
-    if (fieldToChange === ChangeField.Email) {
-      const dialogRef = this.dialog.open(ChangeUserDataDialogComponent, {
-        width: '250px',
-        data: { email: this.shownData.email },
-      });
-    }
+    var data: ChangeProfileData =
+      fieldToChange === ChangeField.Email
+        ? { actionWith: ActionWith.Email, email: this.shownData.email }
+        : fieldToChange === ChangeField.Password
+        ? { actionWith: ActionWith.Password }
+        : null;
+    const dialogRef = this.dialog.open(ChangeUserDataDialogComponent, {
+      width: '250px',
+      data,
+    });
+    dialogRef.afterClosed().subscribe((result: CloseDialog) => {
+      if (result.reason === CloseDialogResult.Updated) {
+        if (result.actionWith === ActionWith.Email) {
+          this.shownData.email = result.profileData.email;
+        } else if (result.actionWith === ActionWith.Password) {
+        }
+      } else {
+      }
+    });
   }
 }

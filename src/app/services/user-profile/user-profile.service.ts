@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ChangeEmail } from 'src/app/components/profile/dialog-interfaces/change-email';
+import { ChangeProfileData } from 'src/app/components/profile/dialog-interfaces/change-profile-info';
 import { GetUserProfile } from 'src/app/interfaces/server-interfaces/get-user-profile';
 
 @Injectable({
@@ -14,7 +14,10 @@ export class UserProfileService {
     return this.http.get<GetUserProfile>(`${this.baseUrl}/profile`);
   }
 
-  changeEmail(email: ChangeEmail) {
-    return this.http.put<any>(`${this.baseUrl}/profile`, email);
+  changeProfileData(profileData: ChangeProfileData) {
+    return this.http.put<any>(`${this.baseUrl}/profile`, profileData);
+  }
+  changePassword(passwords: ChangeProfileData) {
+    return this.http.put<any>(`${this.baseUrl}/password`, passwords);
   }
 }
