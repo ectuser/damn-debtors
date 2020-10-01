@@ -32,6 +32,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { ChangeUserDataDialogComponent } from './components/profile/change-user-data-dialog/change-user-data-dialog.component';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { ProfileComponent } from './components/profile/profile.component';
     SignInComponent,
     SignUpComponent,
     ProfileComponent,
+    ChangeUserDataDialogComponent,
   ],
   imports: [
     BrowserModule,

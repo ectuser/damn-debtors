@@ -15,9 +15,9 @@
       <mat-form-field class="add-debtor-field">
         <mat-label>Debt</mat-label>
         <input matInput formControlName="debt" type="number" />
-        <mat-error *ngIf="addDebtForm.get('debt').invalid">{{
-          validationService.getFieldErrorMessage(addDebtForm, "debt")
-        }}</mat-error>
+        <mat-error *ngIf="addDebtForm.get('debt').invalid">
+          {{ validationService.getFieldErrorMessage(addDebtForm, "debt") }}
+        </mat-error>
       </mat-form-field>
     </div>
 

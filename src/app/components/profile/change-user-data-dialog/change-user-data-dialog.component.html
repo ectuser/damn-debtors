@@ -1,0 +1,36 @@
+<form [formGroup]="changeForm" (ngSubmit)="onSubmit()">
+  <div mat-dialog-content>
+    <div *ngIf="data.actionWith === actionWith.Email">
+      <mat-form-field>
+        <mat-label>New email</mat-label>
+        <input matInput formControlName="email" />
+        <mat-error *ngIf="changeForm.get('email').invalid">
+          {{ validationService.getFieldErrorMessage(changeForm, "email") }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div *ngIf="data.actionWith === actionWith.Password">
+      <mat-form-field>
+        <mat-label>Old Password</mat-label>
+        <input matInput formControlName="oldPassword" />
+        <mat-error *ngIf="changeForm.get('oldPassword').invalid">
+          {{
+            validationService.getFieldErrorMessage(changeForm, "oldPassword")
+          }}
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>New Password</mat-label>
+        <input matInput formControlName="newPassword" />
+        <mat-error *ngIf="changeForm.get('newPassword').invalid">
+          {{
+            validationService.getFieldErrorMessage(changeForm, "newPassword")
+          }}
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+  <div mat-dialog-actions style="text-align: center">
+    <button mat-button color="primary" type="submit">Change</button>
+  </div>
+</form>
