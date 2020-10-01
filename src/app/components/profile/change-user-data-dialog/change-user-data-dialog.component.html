@@ -1,0 +1,14 @@
+<form [formGroup]="changeForm" (ngSubmit)="onSubmit()">
+  <div mat-dialog-content>
+    <mat-form-field>
+      <mat-label>New email</mat-label>
+      <input matInput formControlName="email" />
+      <mat-error *ngIf="changeForm.get('email').invalid">
+        {{ validationService.getFieldErrorMessage(changeForm, "email") }}
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions style="text-align: center">
+    <button mat-button color="primary" type="submit">Change</button>
+  </div>
+</form>

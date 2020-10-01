@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { GetUserProfile } from 'src/app/interfaces/server-interfaces/get-user-profile';
 import { UserProfileService } from 'src/app/services/user-profile/user-profile.service';
+import { ChangeField } from './change-field';
+import { ChangeUserDataDialogComponent } from './change-user-data-dialog/change-user-data-dialog.component';
 
 @Component({
   selector: 'app-profile',
@@ -9,7 +12,11 @@ import { UserProfileService } from 'src/app/services/user-profile/user-profile.s
 })
 export class ProfileComponent implements OnInit {
   shownData: GetUserProfile;
-  constructor(private userProfileService: UserProfileService) {}
+  changeField = ChangeField;
+  constructor(
+    private userProfileService: UserProfileService,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.userProfileService.getProfileData().subscribe(
@@ -18,5 +25,14 @@ export class ProfileComponent implements OnInit {
       },
       (err) => console.log(err)
     );
+  }
+
+  changeData(fieldToChange: ChangeField) {
+    if (fieldToChange === ChangeField.Email) {
+      const dialogRef = this.dialog.open(ChangeUserDataDialogComponent, {
+        width: '250px',
+        data: { email: this.shownData.email },
+      });
+    }
   }
 }
