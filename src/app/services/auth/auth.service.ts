@@ -55,6 +55,8 @@ export class AuthService {
         tap((value) => {
           if (value && value.token && value.success) {
             this.setAuthorizationToken(value.token);
+          } else {
+            console.log('Not success', value);
           }
         })
       );
@@ -112,5 +114,6 @@ export class AuthService {
   }
   setAuthorizationToken(value: string) {
     localStorage.setItem('bearerToken', value);
+    this.token = value;
   }
 }

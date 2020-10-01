@@ -103,7 +103,7 @@ usersRouter.get('/profile', passport_1["default"].authenticate('jwt', { session:
     });
 }); });
 usersRouter.put('/password', passport_1["default"].authenticate('jwt', { session: false }), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var userId, dbUser, result, salt, encryptedPassword, updatePasswordResult;
+    var userId, dbUser, result, salt, encryptedPassword, updatePasswordResult, payload;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -140,7 +140,18 @@ usersRouter.put('/password', passport_1["default"].authenticate('jwt', { session
             case 2:
                 updatePasswordResult = _a.sent();
                 if (updatePasswordResult) {
-                    res.json({ message: 'Password updated' });
+                    payload = {
+                        id: dbUser.id,
+                        email: dbUser.email
+                    };
+                    jwt.sign(payload, securityService_1.getSecretForPassport(), { expiresIn: 36000 }, function (err, token) {
+                        if (err)
+                            res.status(500).json({ error: 'Error signing token', raw: err });
+                        res.json({
+                            success: true,
+                            token: "Bearer " + token
+                        });
+                    });
                 }
                 else {
                     res.status(500).json({ message: 'Something went wrong' });
