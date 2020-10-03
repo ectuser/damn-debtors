@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken');
 import { debtsDb, usersDb } from '../../db/dbConnection';
 import passport from '../../passport';
-import { GetUserProfile } from '../../../client-server-models.ts/get-user-profile';
+import { GetUserProfile } from '../../client-server-models.ts/get-user-profile';
 import {
   checkThePassword,
   encryptPassword,
